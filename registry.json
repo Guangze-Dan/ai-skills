@@ -1,0 +1,192 @@
+{
+    "updated":  "2026-10-07",
+    "source":  "https://github.com/Guangze-Dan/ai-skills",
+    "count":  37,
+    "skills":  [
+                   {
+                       "name":  "agent-reach",
+                       "dir":  "skills/agent-reach",
+                       "description":  "MUST USE when user wants to 调研/research/搜索/search/查/找/look up anything on the internet — e.g. 全网调研 X / 帮我调研一下 X / 查一下 X / 搜搜 X / 看看大家怎么评价 X / X 上有什么讨论 / research this topic。  Also MUST USE when user mentions any platform or shares any URL/链接: 小红书/xiaohongshu/xhs, Twitter/推特/X, B站/bilibili, Reddit, Facebook, Instagram, V2EX, LinkedIn/领英/Boss直聘/招聘/求职/jobs, YouTube, GitHub code search, 小宇宙播客, 雪球/股票行情, RSS feeds, or any web URL.  16 platforms, multi-backend routing (OpenCLI / per-platform CLIs / APIs). Zero config for 6 channels. Run `agent-reach doctor --json` to see which backend serves each platform right now.  NOT for: 写报告/数据分析/翻译等内容加工（本 skill 只负责从互联网获取内容）； 发帖/评论/点赞等写操作；已有专门 skill 的平台（先用专门 skill）。  【路由方式】SKILL.md 包含路由表和常用命令，复杂场景需按需阅读对应分类的 references/*.md。 分类：search / social (小红书/推特/B站/V2EX/Reddit/Facebook/Instagram) / career(LinkedIn/Boss直聘) / dev(github) / web(网页/文章/RSS) / video(YouTube/B站/播客) / finance(雪球/股票)。 metadata: homepage: https://github.com/Panniantong/Agent-Reach"
+                   },
+                   {
+                       "name":  "hatch-pet",
+                       "dir":  "skills/hatch-pet",
+                       "description":  "Create, repair, validate, visually QA, and package Codex-compatible v2 animated pets from character art, generated images, company or prospect brand cues, or visual references. Use for any new Codex pet, custom mascot, non-pixel pet style, brand-inspired pet, existing-pet repair, or 8x11 spritesheet workflow requiring all 9 standard animation rows, 16 look directions, deterministic assembly, QA artifacts, and spriteVersionNumber 2 packaging."
+                   },
+                   {
+                       "name":  "hindsight-coding-agent",
+                       "dir":  "skills/hindsight-coding-agent",
+                       "description":  "How this machine\u0027s Hindsight coding-agent memory works — the plugin behind the 🧠 banner. Use when the user says \"store/remember this in hindsight\", asks what the memory/knowledge pages are, wants to configure per-repo memory (disable, rename banks, git depth), or something memory-related looks broken."
+                   },
+                   {
+                       "name":  "hyperframes",
+                       "dir":  "skills/hyperframes",
+                       "description":  "Mandatory entry point: read this first for any request to make, create, edit, animate, or render a video, animation, or motion graphic, including a promo, explainer, captioned clip, title card, overlay, slideshow or interactive deck, Remotion port, or any HyperFrames HTML composition. Also use it to inspect, diagnose, validate, preview, publish, or batch-render an existing HyperFrames project. Inputs may be a website URL, GitHub PR, Figma design or URL, text or brief, existing footage, or music. It resumes project state, captures intent when applicable, selects and installs the owning workflow, and routes domain capabilities. HyperFrames is the default output framework unless the user explicitly chooses another framework for the deliverable or asks only to record a browser session."
+                   },
+                   {
+                       "name":  "hyperframes-animation",
+                       "dir":  "skills/hyperframes-animation",
+                       "description":  "All animation knowledge for HyperFrames — atomic motion rules, multi-phase scene blueprints, scene transitions, broader motion-design techniques, AND the seven runtime adapters (GSAP default, plus Lottie, Three.js, Anime.js, CSS keyframes, Web Animations API, TypeGPU). Use for any motion or animation task: pick 2-4 rules and compose, or load a blueprint, or look up runtime-specific API (e.g. GSAP eases / Lottie player / Three.js mixer). Also covers auditing an existing composition\u0027s choreography (animation map) and 24 named text-animation effects. HyperFrames-native: single paused timeline, seek-safe, deterministic."
+                   },
+                   {
+                       "name":  "hyperframes-audio",
+                       "dir":  "skills/hyperframes-audio",
+                       "description":  "Use when audio already placed in a HyperFrames composition needs to be mixed: fade-in/fade-out, crossfade, track gain or volume, volume automation, ducking, a music bed that fights a voiceover (voiceover carve), effects on a track (EQ, compressor, limiter, gate, saturation, delay, reverb, chorus, phaser, bitcrush), automation envelopes drawn on a track\u0027s volume or any effect parameter, or one submix bus carrying a chain, a fader and an automation clock for several tracks at once (`\u003chf-audio-group\u003e`). Don\u0027t use for sourcing or generating audio — finding BGM, SFX, or making a voiceover is `/media-use`. Don\u0027t use for clip timing or track layout, which is `/hyperframes-core`."
+                   },
+                   {
+                       "name":  "hyperframes-cli",
+                       "dir":  "skills/hyperframes-cli",
+                       "description":  "Use the HyperFrames CLI development loop: init, add, catalog, capture, lint, check, snapshot, compare, grade-compare, preview, play, present, beats, keyframes, single or batch render, publish, cloud, cloudrun, feedback, lambda, doctor, browser, info, upgrade, skills, compositions, timeline, history, clean, docs, benchmark, telemetry, transcribe, auth, tts, and remove-background. Also use when diagnosing build or render failures. validate, inspect, and layout are deprecated aliases; use check. Covers local, HeyGen-hosted cloud, AWS Lambda, and Google Cloud Run rendering."
+                   },
+                   {
+                       "name":  "hyperframes-core",
+                       "dir":  "skills/hyperframes-core",
+                       "description":  "The HyperFrames composition contract — build one renderable project. Use for composition structure, the `data-*` timing attributes, `class=\"clip\"`, tracks, sub-compositions, variables, framework-owned media playback, deterministic-render rules, and validation. Read before writing composition HTML."
+                   },
+                   {
+                       "name":  "hyperframes-creative",
+                       "dir":  "skills/hyperframes-creative",
+                       "description":  "Non-animation creative direction for HyperFrames videos. Use for design spec (frame.md / design.md) handling, palettes, typography, narration, beat planning, audio-reactive visuals, composition patterns, and brand / style decisions. For atomic motion patterns and scene blueprints, use `hyperframes-animation`."
+                   },
+                   {
+                       "name":  "hyperframes-keyframes",
+                       "dir":  "skills/hyperframes-keyframes",
+                       "description":  "Use when a HyperFrames composition needs a punch-in, punch-out, zoom, reframe, Ken Burns treatment, camera move, visual match/whip handoff, or other seek-safe 2D/3D keyframes; also for GSAP, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, text trails, 3D depth, or `hyperframes keyframes` diagnostics. Don\u0027t use for broad scene strategy, brand design, media sourcing, captions, or general video planning."
+                   },
+                   {
+                       "name":  "hyperframes-registry",
+                       "dir":  "skills/hyperframes-registry",
+                       "description":  "Search, install, and wire registry blocks and components into HyperFrames compositions. Use BEFORE hand-building any named visual — whenever a brief, a user, or a storyboard names a look, effect, treatment, or transition such as CRT scanlines, glitch, chromatic aberration, film grain, a shimmer sweep, a chart, a code or terminal window, a map, or a confetti burst — because roughly 400 hosted items already cover many of them and the search ranks all of them with nothing installed, no project, and no account. Also use when running hyperframes add or hyperframes catalog, installing one item or every block matching a tag, wiring an installed item into index.html, or working with hyperframes.json. Covers discovery, install locations, block sub-composition wiring, component snippet merging, and authoring a new block or component to contribute upstream (idea → scaffold → validate → PR)."
+                   },
+                   {
+                       "name":  "hyperframes-studio",
+                       "dir":  "skills/hyperframes-studio",
+                       "description":  "Use when working with a person on a HyperFrames project in Studio: first, whether their message asks for a change at all (questions, loose ideas and \"don\u0027t change anything\" get an answer and a plan, not an edit); for a new film, the plan, storyboard and build order that the HyperFrames launch films follow; and how the timeline should be laid out so it reads well (one caption track, one element kind per track, every scene a sub-composition) and where captions and key content may sit (safe zones). Don\u0027t use for how to perform an individual edit (split, trim, retime, volume, copy, swap): that is `creator-editing-recipes.md` in `/hyperframes-core`."
+                   },
+                   {
+                       "name":  "impeccable",
+                       "dir":  "skills/impeccable",
+                       "description":  "Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Handles UX review, visual hierarchy, information architecture, cognitive load, accessibility, performance, responsive behavior, theming, anti-patterns, typography, fonts, spacing, layout, alignment, color, motion, micro-interactions, UX copy, error states, edge cases, i18n, and reusable design systems or tokens. Also use for bland designs that need to become bolder or more delightful, loud designs that should become quieter, live browser iteration on UI elements, or ambitious visual effects that should feel technically extraordinary. Not for backend-only or non-UI tasks."
+                   },
+                   {
+                       "name":  "lightpanda",
+                       "dir":  "skills/lightpanda",
+                       "description":  "Lightweight headless browser for AI agents (Lightpanda 1.0.0), running inside WSL2 on this machine and reachable from Windows via CDP at http://127.0.0.1:9222. Use when you need to read, render, crawl or screenshot web pages cheaply — about 10x lighter and much faster to start than Chrome — without needing the full browser-use plugin. Covers starting/stopping the server, health checks, CDP connections (Playwright/Puppeteer/raw WebSocket), and troubleshooting the WSL setup. Not for JS-heavy SPA interaction that requires full Chrome fidelity — use the browser-use plugin instead."
+                   },
+                   {
+                       "name":  "media-use",
+                       "dir":  "skills/media-use",
+                       "description":  "Agent Media OS, the single skill for every media need in a HyperFrames project. Resolve BGM, SFX, image, icon, brand logo, voice, color grade, or LUT into a frozen local file or paste-ready block + ledger record (one verb, `resolve`); generate via TTS / music / image models when the catalog misses; produce voiceover, transcription, captions, and background removal through one shared audio engine; operate on media (cut / reframe / transform); and reuse assets across projects. Also use for vague feedback that real footage looks dark, flat, boring, should feel retro/camcorder/print/ASCII, needs privacy, or needs a media reveal."
+                   },
+                   {
+                       "name":  "nature-academic-search",
+                       "dir":  "skills/nature-academic-search",
+                       "description":  "Search literature across sources, verify or manage citations, and build MeSH strategies or citation-impact audits. Use for 文献检索、引文核对、参考文献管理、严格他引 and evidence-backed citer profiles; not for translating a paper or drafting manuscript prose."
+                   },
+                   {
+                       "name":  "nature-citation",
+                       "dir":  "skills/nature-citation",
+                       "description":  "Find and verify Nature/CNS-family literature supporting manuscript claims, with claim-to-source mapping and reference-manager export. Use for Nature系列引用、CNS支撑文献、分段补引用 when this journal scope is requested; use broader literature search for unrestricted sources."
+                   },
+                   {
+                       "name":  "nature-data",
+                       "dir":  "skills/nature-data",
+                       "description":  "Draft or audit manuscript Data/Code Availability statements, dataset access routes, repository plans, and FAIR metadata. Use for 数据可用性声明、数据共享、数据仓库选择 and dataset citations; not general data cleaning or statistical analysis."
+                   },
+                   {
+                       "name":  "nature-downloader",
+                       "dir":  "skills/nature-downloader",
+                       "description":  "Use when a user needs lawful academic full text, CNKI institutional access, English OA retrieval, publisher API access, institutional browser fallback, or supporting information downloads."
+                   },
+                   {
+                       "name":  "nature-experiment-log",
+                       "dir":  "skills/nature-experiment-log",
+                       "description":  "标准化实验日志记录——直接上传或读取本地图片、语音和文字，产出带 YAML frontmatter 的 Markdown；可选集成飞书 CLI 与 Obsidian。"
+                   },
+                   {
+                       "name":  "nature-figure",
+                       "dir":  "skills/nature-figure",
+                       "description":  "Create, revise, audit, and export manuscript scientific figures in Python or R. Use for 论文配图、科研绘图、多面板图 and submission-ready plots, or explicitly requested AI-generated graphical abstracts and mechanism schematics. Not for interactive dashboards, data cleaning, or statistics-only analysis."
+                   },
+                   {
+                       "name":  "nature-image2ppt",
+                       "dir":  "skills/nature-image2ppt",
+                       "description":  "Reconstruct slide images, screenshots, scanned PDFs, or image-only PPTX files as object-level editable PowerPoint. Use for 图片转可编辑PPT、截图还原PPT and diagram reconstruction; not authoring a new deck from research notes."
+                   },
+                   {
+                       "name":  "nature-literature-pipeline",
+                       "dir":  "skills/nature-literature-pipeline",
+                       "description":  "Complete automated literature discovery pipeline: multi-source search → six-dimension scoring → fine reading → formatted delivery → archival. Combines a configurable engine with daily cron-driven application layer. Works with Feishu, Telegram, or any messaging platform. license: MIT metadata: author: Jiahao8595 hermes: tags: [research, literature, pipeline, cron, automation, discovery] related_skills: [nature-academic-search, nature-citation, arxiv, zotero]"
+                   },
+                   {
+                       "name":  "nature-paper2ppt",
+                       "dir":  "skills/nature-paper2ppt",
+                       "description":  "Create or improve a Chinese academic PPTX from a scientific paper or research reading notes, with source figures and speaker notes. Use for 论文做PPT、文献汇报、组会PPT and paper-based conference or defense presentations."
+                   },
+                   {
+                       "name":  "nature-paper-card",
+                       "dir":  "skills/nature-paper-card",
+                       "description":  "Build a structured deep-reading Paper Card for one scientific paper, analysing methods, experiment-to-claim evidence, limitations, and research ideas. Use for 论文精读卡、方法拆解、证据链分析; not full-paper bilingual translation or formal peer review."
+                   },
+                   {
+                       "name":  "nature-paper-to-patent",
+                       "dir":  "skills/nature-paper-to-patent",
+                       "description":  "Turn research papers or inventor materials into evidence-grounded Chinese invention patent drafts and technical disclosures. Use for 技术交底书、专利撰写、现有技术对比 and Chinese DOCX patent packages; not general manuscript writing."
+                   },
+                   {
+                       "name":  "nature-paper-trans",
+                       "dir":  "skills/nature-paper-trans",
+                       "description":  "将英文论文 PDF 的指定页或全文逐页一次生图翻译为简体中文 A4 图片型 PDF，并交付简洁的逐页检查 Markdown，供用户选择后续更新页。用于论文阅读翻译，不用于可编辑文档重建或逐字审校。"
+                   },
+                   {
+                       "name":  "nature-polishing",
+                       "dir":  "skills/nature-polishing",
+                       "description":  "Polish, translate, or tighten existing academic prose while preserving facts, terminology, and evidence boundaries. Use for 论文润色、学术翻译、正文精简, or manuscript LaTeX layout fixes. Use nature-writing when the main task is drafting new sections or rebuilding the manuscript argument."
+                   },
+                   {
+                       "name":  "researchwrite",
+                       "dir":  "skills/nature-proposal-writer",
+                       "description":  "Compose, revise, or audit research proposals, opening reports, and research plans from supporting evidence. Use for 研究计划、开题报告、科研项目申请书. Invoked as researchwrite for compatibility; use nature-writing for general manuscript sections."
+                   },
+                   {
+                       "name":  "nature-reader",
+                       "dir":  "skills/nature-reader",
+                       "description":  "Create source-grounded Chinese-English paper readers with aligned text, figures, tables, and equations. Use for 全文翻译、中英文对照、论文精读 or source-linked questions about a paper; respect a requested excerpt or question without generating a full reader."
+                   },
+                   {
+                       "name":  "nature-ref-verifier",
+                       "dir":  "skills/nature-ref-verifier",
+                       "description":  "对学术文献逐条执行多源交叉验证，逐字段对比作者、标题、年份、卷期、页码， 标记卷年/DOI年冲突、作者顺序异常、页码偏差等问题，输出结构化验证报告。 可批量处理整篇论文/开题报告的参考文献列表，也可单条校验，支持与 Zotero 同步修正。"
+                   },
+                   {
+                       "name":  "nature-response",
+                       "dir":  "skills/nature-response",
+                       "description":  "Draft, audit, or revise responses to peer review, revision cover letters, and marked-manuscript or LaTeX revision packages. Use for 审稿意见回复、逐点回复、返修信、 rebuttals and edits to existing response drafts. Initial-submission materials belong to nature-writing; simulated peer review belongs to nature-reviewer."
+                   },
+                   {
+                       "name":  "nature-reviewer",
+                       "dir":  "skills/nature-reviewer",
+                       "description":  "Provide evidence-grounded mock peer review of scientific manuscripts or excerpts, covering significance, validity, and major/minor concerns. Use for 模拟审稿、投稿前自审、审稿人视角评估; not author rebuttal drafting."
+                   },
+                   {
+                       "name":  "nature-shared",
+                       "dir":  "skills/nature-shared",
+                       "description":  "Internal shared-reference support package for installed Nature Skills, including nature-writing, nature-polishing, nature-response, nature-reader, and nature-paper2ppt. Do not invoke it as a standalone user workflow. Load only the specific core or journal-format file requested by another Nature skill."
+                   },
+                   {
+                       "name":  "nature-statistics",
+                       "dir":  "skills/nature-statistics",
+                       "description":  "Audit or improve manuscript statistical reporting, including experimental units, replication, uncertainty, tests, and figure statistics. Use for 统计审查、统计方法小节、图注统计 and reviewer concerns; compute new analyses only when requested with data."
+                   },
+                   {
+                       "name":  "nature-writing",
+                       "dir":  "skills/nature-writing",
+                       "description":  "Draft or restructure scientific manuscript arguments, sections, and initial-submission materials from author-provided evidence. Use for 论文写作、章节起草、论证重构、正文压缩、首次投稿材料. Use nature-polishing for language-only edits to existing prose and nature-response for post-decision correspondence."
+                   },
+                   {
+                       "name":  "paper-spine",
+                       "dir":  "skills/paper-spine",
+                       "description":  "Research, write, review and deliver evidence-bound papers in one task, with user choices, real files, editable outputs and same-task revision."
+                   }
+               ]
+}

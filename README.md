@@ -1,0 +1,101 @@
+# ai-skills — 个人 AI Agent 技能与脚本 · 统一真源
+
+所有个人 AI skills 和自动化脚本的**唯一真源（Single Source of Truth）**。
+本机各 AI agent（ZCode / Claude Code / Codex / AGENTS 标准）的 skills 目录通过 **NTFS junction** 指向本仓库，
+任何 agent 的调用读到的都是同一份文件；其他仓库可以以子模块方式嵌套接入。
+
+## 结构
+
+```
+ai-skills/
+├── skills/                 # 37 个个人 skill，每个一个文件夹（skills/<name>/SKILL.md）
+├── scripts/                # 历史自动化脚本（已分类）
+│   ├── android-mtp/        #   小米手机 MTP/USB 驱动修复 + APK 推送
+│   ├── android-ui/         #   Android 屏幕 UI dump 解析
+│   ├── productivity/       #   UI 造图 / 课表读取 / 启动器
+│   └── legacy/             #   一次性脚本存档
+├── tools/                  # 仓库维护工具（gen_registry.ps1）
+├── registry.json           # 全部 skill 的机器可读索引（name / dir / description）
+├── AGENT.md                # 给 AI agent 看的入口说明
+├── install.ps1             # 一键接入：把本仓库 junction 到各 agent 的 skills 目录
+├── collect.ps1             # 反向收集：把本地新增/修改的 skill 收进仓库
+└── setup.cmd               # Windows 一键安装入口
+```
+
+## 快速开始
+
+### 新机器接入（Windows）
+
+```powershell
+git clone https://github.com/Guangze-Dan/ai-skills.git D:\ai-skills
+cd D:\ai-skills
+setup.cmd          # 或: powershell -ExecutionPolicy Bypass -File install.ps1
+```
+
+执行后，以下目录里的每个 skill 都变成指向本仓库的 junction（不复制文件）：
+
+| Agent | 目录 |
+|---|---|
+| ZCode | `%USERPROFILE%\.zcode\skills` |
+| AGENTS 标准 | `%USERPROFILE%\.agents\skills` |
+| Claude Code | `%USERPROFILE%\.claude\skills` |
+| Codex | `%USERPROFILE%\.codex\skills` |
+
+### 嵌入其他仓库（多仓嵌套）
+
+方式 A — 子模块（推荐，仓库内固定版本）：
+
+```powershell
+cd <你的项目>
+git submodule add https://github.com/Guangze-Dan/ai-skills.git .ai-skills
+cd .ai-skills && powershell -ExecutionPolicy Bypass -File install.ps1 -Local
+```
+
+这会把 skills junction 到该项目的 `.claude\skills` 和 `.agents\skills`，项目内 agent 直接可用。
+克隆带子模块的仓库时：`git clone --recurse-submodules <url>`。
+
+方式 B — 只挂部分 skill：手动对需要的 skill 建 junction：
+
+```powershell
+New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "D:\ai-skills\skills\nature-writing"
+```
+
+## 日常工作流
+
+- **新增 skill**：直接在 `skills/` 下建 `<name>/SKILL.md`（含 `name` / `description` frontmatter），然后 `git push`。所有 agent 立即可见（junction 实时生效），无需再复制到各目录。
+- **修改 skill**：随便在哪个 agent 目录改（都是同一个文件），或在仓库里改，然后 `git add -A && git commit -m "..." && git push`。
+- **本地新建了 skill 忘了进仓库**：跑 `powershell -ExecutionPolicy Bypass -File collect.ps1 -Push`，自动收进仓库并推送。
+- **更新到最新**：`git pull` 即可（junction 指向仓库目录，pull 完所有 agent 立即生效）。
+
+## Skills 一览（37 个）
+
+完整描述见 [registry.json](registry.json)（含每个 skill 的触发条件），各分类：
+
+| 分类 | Skills |
+|---|---|
+| 科研写作流水线（nature 系列） | nature-academic-search, nature-citation, nature-data, nature-downloader, nature-experiment-log, nature-figure, nature-image2ppt, nature-literature-pipeline, nature-paper-card, nature-paper-to-patent, nature-paper-trans, nature-paper2ppt, nature-polishing, nature-reader, nature-ref-verifier, nature-response, nature-reviewer, nature-shared, nature-statistics, nature-writing |
+| 科研综合 | researchwrite（文件夹 nature-proposal-writer，基金/开题报告撰写）, paper-spine（端到端证据绑定论文） |
+| 视频/动画（HyperFrames 系列） | hyperframes, hyperframes-animation, hyperframes-audio, hyperframes-cli, hyperframes-core, hyperframes-creative, hyperframes-keyframes, hyperframes-registry, hyperframes-studio, media-use |
+| 浏览器/全网调研 | agent-reach（16 平台内容获取）, lightpanda（WSL2 无头浏览器） |
+| 工具/其他 | hatch-pet（Codex 动态宠物）, hindsight-coding-agent（记忆插件）, impeccable（设计/打磨 UI） |
+
+## 自动化脚本（scripts/）
+
+| 脚本 | 用途 |
+|---|---|
+| `android-mtp/copy_apk.ps1` | 通过 MTP 把 APK 推送到小米手机 |
+| `android-mtp/fix_mtp_driver.ps1` | 用 Windows 内置驱动修复 MTP 设备 |
+| `android-mtp/reenumerate.ps1` | 强制重新枚举小米 USB 设备 |
+| `android-mtp/update_driver.ps1` | 给 ADB 接口装 Google USB 驱动 |
+| `android-ui/parse_ui.ps1` | 解析 uiautomator dump 的 UI XML（id/坐标/文本） |
+| `android-ui/dump481.ps1` | 从 UI dump 中提取指定控件子树 |
+| `productivity/ui_mockup.py` | matplotlib 生成 App UI 仿真图 |
+| `productivity/read_schedule.py` | 读取课表 docx 内容 |
+| `productivity/start_zcode.bat` | 启动 ZCode（带路径回退） |
+| `legacy/` | 一次性历史脚本存档 |
+
+## 说明
+
+- 本仓库为**私有**，junction 只在本机有效；换机器用 `git clone + install.ps1` 重建。
+- `.system` 目录（Codex 自动管理的系统 skill）不属于本仓库，由各 agent 自行维护。
+- 已装 git 的机器上，`install.ps1` 会备份内容不一致的旧目录到 `.backup/`（已 gitignore），可随时人工回收。

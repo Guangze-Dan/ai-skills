@@ -1,0 +1,8 @@
+# 仓库维护产物
+.backup/
+_setup/
+
+# 系统与临时文件
+Thumbs.db
+Desktop.ini
+*.log

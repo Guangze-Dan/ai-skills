@@ -1,0 +1,12 @@
+{
+  "contract": "paperspine5.installed-suite-pointer",
+  "schema_version": "1.0",
+  "product_id": "paperspine5",
+  "build_id": "w7a-81c3d2f2bbf6604b5412",
+  "product_version": "0.4.0-alpha.3",
+  "archive_sha256": "0b82966ab10c6d5e9f2237a9f9189db43c82a1c438fa95838c2a754954952a2a",
+  "platform": "windows-amd64",
+  "updater_entry": "release/stable_updater.py",
+  "content_index_sha256": "e29bcd3f7be7da9200442fa52ba3095ea200ca6595b5028c073025d4519e7563",
+  "suite_root": "D:\\Zcode\\.paperspine5\\profiles\\default\\.paperspine5-lifecycle\\installs\\w7a-81c3d2f2bbf6604b5412"
+}
