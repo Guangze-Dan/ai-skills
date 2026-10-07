@@ -1,7 +1,7 @@
 {
     "updated":  "2026-10-08",
     "source":  "https://github.com/Guangze-Dan/ai-skills",
-    "count":  47,
+    "count":  58,
     "skills":  [
                    {
                        "name":  "academic-paper",
@@ -24,14 +24,49 @@
                        "description":  "MUST USE when user wants to 调研/research/搜索/search/查/找/look up anything on the internet — e.g. 全网调研 X / 帮我调研一下 X / 查一下 X / 搜搜 X / 看看大家怎么评价 X / X 上有什么讨论 / research this topic。  Also MUST USE when user mentions any platform or shares any URL/链接: 小红书/xiaohongshu/xhs, Twitter/推特/X, B站/bilibili, Reddit, Facebook, Instagram, V2EX, LinkedIn/领英/Boss直聘/招聘/求职/jobs, YouTube, GitHub code search, 小宇宙播客, 雪球/股票行情, RSS feeds, or any web URL.  16 platforms, multi-backend routing (OpenCLI / per-platform CLIs / APIs). Zero config for 6 channels. Run `agent-reach doctor --json` to see which backend serves each platform right now.  NOT for: 写报告/数据分析/翻译等内容加工（本 skill 只负责从互联网获取内容）； 发帖/评论/点赞等写操作；已有专门 skill 的平台（先用专门 skill）。  【路由方式】SKILL.md 包含路由表和常用命令，复杂场景需按需阅读对应分类的 references/*.md。 分类：search / social (小红书/推特/B站/V2EX/Reddit/Facebook/Instagram) / career(LinkedIn/Boss直聘) / dev(github) / web(网页/文章/RSS) / video(YouTube/B站/播客) / finance(雪球/股票)。 metadata: homepage: https://github.com/Panniantong/Agent-Reach"
                    },
                    {
+                       "name":  "banner-design",
+                       "dir":  "skills/banner-design",
+                       "description":  "Design banners for social media, ads, website heroes, creative assets, and print. Multiple art direction options with optional generated or supplied visuals. Actions: design, create, generate banner. Platforms: Facebook, Twitter/X, LinkedIn, YouTube, Instagram, Google Display, website hero, print. Styles: minimalist, gradient, bold typography, photo-based, illustrated, geometric, retro, glassmorphism, 3D, neon, duotone, editorial, collage."
+                   },
+                   {
+                       "name":  "brand",
+                       "dir":  "skills/brand",
+                       "description":  "Brand voice, visual identity, messaging frameworks, asset management, brand consistency. Activate for branded content, tone of voice, marketing assets, brand compliance, style guides."
+                   },
+                   {
                        "name":  "citation-check-skill",
                        "dir":  "skills/citation-check-skill",
                        "description":  ""
                    },
                    {
+                       "name":  "cli-anything-photoshop",
+                       "dir":  "skills/cli-anything-photoshop",
+                       "description":  "通过 COM 自动化操控 Adobe Photoshop 的 CLI harness。支持项目管理、图层操作、选区控制、文字编辑、图像调整和多格式导出。"
+                   },
+                   {
+                       "name":  "cli-anything-wps",
+                       "dir":  "skills/cli-anything-wps",
+                       "description":  "WPS Office CLI — JSON数据驱动PPT自动生成 + 命令行操控WPS文字/表格/演示文稿"
+                   },
+                   {
+                       "name":  "\u003e-",
+                       "dir":  "skills/cli-anything-zotero",
+                       "description":  "CLI harness for Zotero."
+                   },
+                   {
                        "name":  "deep-research",
                        "dir":  "skills/deep-research",
                        "description":  ""
+                   },
+                   {
+                       "name":  "design",
+                       "dir":  "skills/design",
+                       "description":  "Comprehensive design skill: brand identity, design tokens, UI styling, logo generation (55 styles, Gemini, Atlas Cloud, or MuAPI AI), corporate identity program (50 deliverables, CIP mockups), HTML presentations (Chart.js), banner design (22 styles, social/ads/web/print), icon design (15 styles, SVG, Gemini 3.1 Pro), social photos (HTML→screenshot, multi-platform). Actions: design logo, create CIP, generate mockups, build slides, design banner, generate icon, create social photos, social media images, brand identity, design system. Platforms: Facebook, Twitter, LinkedIn, YouTube, Instagram, Pinterest, TikTok, Threads, Google Ads."
+                   },
+                   {
+                       "name":  "design-system",
+                       "dir":  "skills/design-system",
+                       "description":  "Token architecture, component specifications, and slide generation. Three-layer tokens (primitive→semantic→component), CSS variables, spacing/typography scales, component specs, strategic slide creation. Use for design tokens, systematic design, brand-compliant presentations."
                    },
                    {
                        "name":  "hatch-pet",
@@ -224,9 +259,29 @@
                        "description":  "Draft or restructure scientific manuscript arguments, sections, and initial-submission materials from author-provided evidence. Use for 论文写作、章节起草、论证重构、正文压缩、首次投稿材料. Use nature-polishing for language-only edits to existing prose and nature-response for post-decision correspondence."
                    },
                    {
+                       "name":  "open-design",
+                       "dir":  "skills/open-design",
+                       "description":  "Bring the Open Design catalogue into any agent session: 150+ brand DESIGN.md files, 110+ rendering templates (decks, prototypes, dashboards, posters, image/video/audio), 130+ functional skills, and 11 craft references. Pick a brand spec and a template/skill, layer in universal craft rules, then follow the resulting workflow. Use when the user wants to build a deck, prototype, landing page, dashboard, marketing artifact, or apply a specific brand\u0027s visual identity to their project. triggers: - \"use open design\" - \"with open design\" - \"open design skill\" - \"open-design\" - \"make me a deck\" - \"build a deck\" - \"pitch deck\" - \"design system\" - \"brand guidelines\" - \"apply design system\" - \"landing page with\" - \"dashboard with\" - \"marketing page with\""
+                   },
+                   {
                        "name":  "paper-spine",
                        "dir":  "skills/paper-spine",
                        "description":  "Research, write, review and deliver evidence-bound papers in one task, with user choices, real files, editable outputs and same-task revision."
+                   },
+                   {
+                       "name":  "slides",
+                       "dir":  "skills/slides",
+                       "description":  "Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copywriting formulas, and contextual slide strategies."
+                   },
+                   {
+                       "name":  "ui-styling",
+                       "dir":  "skills/ui-styling",
+                       "description":  "Create beautiful, accessible user interfaces with shadcn/ui components (built on Radix UI + Tailwind), Tailwind CSS utility-first styling, and canvas-based visual designs. Use when building user interfaces, implementing design systems, creating responsive layouts, adding accessible components (dialogs, dropdowns, forms, tables), customizing themes and colors, implementing dark mode, generating visual designs and posters, or establishing consistent styling patterns across applications."
+                   },
+                   {
+                       "name":  "ui-ux-pro-max",
+                       "dir":  "skills/ui-ux-pro-max",
+                       "description":  "UI/UX design intelligence for web, mobile, and desktop. This skill should be used when designing, building, reviewing, or fixing interfaces, including pages, components, design systems, accessibility, interaction, responsive layout, typography, color, charts, and stack-specific UI implementation. Searchable local data: 79 searchable styles (50 active), 192 product palettes and reasoning profiles, 74 font pairings, 119 UX guidelines, 105 icons, 17 GSAP presets, 25 chart types, and 22 stacks."
                    },
                    {
                        "name":  "zo-read-paper",
