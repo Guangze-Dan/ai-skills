@@ -133,6 +133,7 @@ gh repo edit ai-skills --visibility public --accept-visibility-change-consequenc
 8. 仓库 `.gitattributes` 对 `.ps1/.bat` 强制 CRLF、`.py` 强制 LF，git 会打 CRLF 警告——无害，勿因警告改行尾。
 9. GitHub 推送偶发 `Empty reply from server`（瞬时网络），重试即可。
 10. 仓库私有、无 LICENSE、无 CI；junction 只在本机有效，换机器靠 clone + install.ps1 + 手动注册钩子重建。
+11. **windows-mcp 已装**（2026-10-07）：uv tool 装于 `C:\Users\Dan\.local\bin\windows-mcp.exe`（该目录已加入用户 PATH），`C:\Users\Dan\.local\bin`；已在 ZCode `config.json` / Claude Code `.claude.json` / Codex `config.toml` 三处注册同一 stdio 服务器（`windows-mcp serve`，env 关闭匿名遥测，超时 60s/120s）。uv 经 pip 装于 `C:\Users\Dan\AppData\Roaming\Python\Python314\Scripts\uv.exe`（该 Scripts 目录不在 PATH）。`.claude.json` 改动前备份在 `~/.claude.json.bak-windowsmcp`。
 
 ## 九、建议的下一步（按优先级）
 
