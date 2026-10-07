@@ -14,10 +14,12 @@ $ErrorActionPreference = 'Stop'
 $Repo       = Split-Path -Parent $PSScriptRoot   # repo root = parent of this tools\ dir
 $StateFile  = Join-Path $Repo 'tools\.sync-state.json'
 $LogFile    = Join-Path $Repo 'tools\sync.log'
-# Watch roots are machine-specific; missing paths are skipped automatically.
+# Watch roots cover every machine that shares this repo; missing paths are skipped automatically.
 $WatchRoots = @(
-    'E:\Zcode数据\.zcode\workspace\default',
-    'E:\Zcode数据'
+    'E:\Zcode数据\.zcode\workspace\default',   # new machine (C:\Users\Dan)
+    'E:\Zcode数据',
+    'D:\Zcode\.zcode\workspace\default',       # old machine (C:\Users\32204)
+    'D:\Zcode'
 )
 $Extensions = @('.ps1', '.py', '.bat', '.cmd', '.sh', '.js', '.ts', '.ahk')
 $MaxBytes   = 2MB

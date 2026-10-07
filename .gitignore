@@ -8,3 +8,5 @@ tools/sync.log
 Thumbs.db
 Desktop.ini
 *.log
+__pycache__/
+*.pyc
