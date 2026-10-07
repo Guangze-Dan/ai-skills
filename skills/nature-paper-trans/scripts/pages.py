@@ -3,7 +3,6 @@
 
 import argparse
 import contextlib
-import fcntl
 import hashlib
 import html
 import io
@@ -13,8 +12,14 @@ from pathlib import Path
 import re
 import sys
 import tempfile
+import time
 from datetime import datetime, timezone
 import uuid
+
+if os.name == "nt":
+    import msvcrt
+else:
+    import fcntl
 
 try:
     import fitz
@@ -38,6 +43,12 @@ def require(condition, message):
         raise TaskError(message)
 
 
+A4_PAGE_SIZE_POINTS = (210 * 72 / 25.4, 297 * 72 / 25.4)
+# Used only when reading a legacy task created before source page sizes were
+# recorded. New tasks always preserve each source PDF page's own size.
+LEGACY_PAGE_SIZE_POINTS = A4_PAGE_SIZE_POINTS
+
+
 def now():
     return datetime.now(timezone.utc).isoformat()
 
@@ -51,6 +62,29 @@ def digest(path):
     return value.hexdigest()
 
 
+def _publish_without_replace(source, target):
+    """Publish a completed temporary file without replacing an existing target."""
+    try:
+        os.link(source, target)
+    except (AttributeError, OSError):
+        if os.name != "nt":
+            raise
+        # Windows rename refuses to replace an existing destination, which
+        # preserves the no-overwrite contract when hard links are unavailable.
+        os.rename(source, target)
+
+
+def _sync_directory(path):
+    """Durably sync a parent directory where the platform exposes that API."""
+    if os.name == "nt":
+        return
+    directory = os.open(str(path), os.O_RDONLY)
+    try:
+        os.fsync(directory)
+    finally:
+        os.close(directory)
+
+
 def atomic_bytes(path, data, replace=True):
     fd, temporary = tempfile.mkstemp(prefix="." + path.name + "-", dir=str(path.parent))
     try:
@@ -61,12 +95,8 @@ def atomic_bytes(path, data, replace=True):
         if replace:
             os.replace(temporary, path)
         else:
-            os.link(temporary, path)
-        directory = os.open(str(path.parent), os.O_RDONLY)
-        try:
-            os.fsync(directory)
-        finally:
-            os.close(directory)
+            _publish_without_replace(temporary, path)
+        _sync_directory(path.parent)
     finally:
         if os.path.exists(temporary):
             os.unlink(temporary)
@@ -77,17 +107,43 @@ def save(work, task):
     atomic_bytes(work / "task.json", json.dumps(task, ensure_ascii=False, indent=2).encode("utf-8"))
 
 
+def _lock_stream(stream):
+    if os.name == "nt":
+        # msvcrt locks a byte range. Keep one byte in the lock file and use
+        # the blocking mode so concurrent commands wait for the owner.
+        stream.seek(0)
+        stream.write(b"\0")
+        stream.flush()
+        stream.seek(0)
+        while True:
+            try:
+                msvcrt.locking(stream.fileno(), msvcrt.LK_NBLCK, 1)
+                break
+            except OSError:
+                time.sleep(0.1)
+        return
+    fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
+
+
+def _unlock_stream(stream):
+    if os.name == "nt":
+        stream.seek(0)
+        msvcrt.locking(stream.fileno(), msvcrt.LK_UNLCK, 1)
+        return
+    fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+
+
 @contextlib.contextmanager
 def locked(work, create=False):
     if create:
         work.mkdir(parents=True, exist_ok=True)
     require(work.is_dir(), "Work directory missing: " + str(work))
     with (work / ".task.lock").open("a+b") as stream:
-        fcntl.flock(stream.fileno(), fcntl.LOCK_EX)
+        _lock_stream(stream)
         try:
             yield
         finally:
-            fcntl.flock(stream.fileno(), fcntl.LOCK_UN)
+            _unlock_stream(stream)
 
 
 def migrate_v1(task):
@@ -146,6 +202,11 @@ def check_assets(work, task, allow_pending_missing=False):
     seen_ids = set()
     for number in task["selected_pages"]:
         page = task["pages"][str(number)]
+        source_size = page.get("source_page_size")
+        if source_size is not None:
+            require(isinstance(source_size, list) and len(source_size) == 2
+                    and all(isinstance(value, (int, float)) and value > 0 for value in source_size),
+                    "Invalid source page size")
         records = page.get("attempt_records")
         require(isinstance(records, list) and type(page.get("attempts")) is int
                 and page["attempts"] == len(records) <= policy["max_attempts_per_page"], "Invalid attempt ledger")
@@ -215,6 +276,19 @@ def selected_pages(value, count):
 def page_record(task, number):
     require(str(number) in task["pages"], "Page not selected: " + str(number))
     return task["pages"][str(number)]
+
+
+def source_page_size(task, number, page=None):
+    """Return the source PDF page size, including for legacy task ledgers."""
+    recorded = (page or page_record(task, number)).get("source_page_size")
+    if recorded:
+        return recorded
+    try:
+        with fitz.open(task["source"]["path"]) as source:
+            rect = source[number - 1].rect
+            return [float(rect.width), float(rect.height)]
+    except (OSError, IndexError, KeyError, ValueError):
+        return LEGACY_PAGE_SIZE_POINTS
 
 
 def attempt_record(page, identifier):
@@ -326,6 +400,11 @@ def prepare(args, work):
             for number in selected:
                 record = task["pages"][str(number)]
                 target = asset(work, record["input"])
+                source_rect = pdf[number - 1].rect
+                source_size = [float(source_rect.width), float(source_rect.height)]
+                if record.get("source_page_size") != source_size:
+                    record["source_page_size"] = source_size
+                    save(work, task)
                 if target.exists():
                     continue
                 require(record["attempts"] == 0, "Cannot recreate reference after attempt was spent")
@@ -485,12 +564,14 @@ def select(args, work):
 
 
 def verify_pdf(path, expected):
-    width, height = 210 * 72 / 25.4, 297 * 72 / 25.4
     with fitz.open(str(path)) as pdf:
         require(len(pdf) == len(expected), "Assembly verification: page count mismatch")
-        for page, dimensions in zip(pdf, expected):
-            require(abs(page.rect.width - width) < 0.02 and abs(page.rect.height - height) < 0.02,
-                    "Assembly verification: page is not portrait A4")
+        for page, item in zip(pdf, expected):
+            dimensions = item["dimensions"]
+            page_size = item.get("page_size") or LEGACY_PAGE_SIZE_POINTS
+            require(abs(page.rect.width - page_size[0]) < 0.02
+                    and abs(page.rect.height - page_size[1]) < 0.02,
+                    "Assembly verification: page size changed")
             images = page.get_images(full=True)
             require(len(images) == 1 and list(images[0][2:4]) == dimensions,
                     "Assembly verification: embedded pixel dimensions changed")
@@ -531,7 +612,7 @@ def composition(args, work):
         yield task, overlays
 
 
-def compose_pages(work, task, overlays, for_pdf):
+def compose_pages(work, task, overlays, for_pdf, require_review=True):
     rows = []
     for number in task["selected_pages"]:
         base_page = page_record(task, number)
@@ -552,15 +633,17 @@ def compose_pages(work, task, overlays, for_pdf):
             path, source, page, image = chosen
             require(len(available(page)) < 2 or page["selection_confirmed"],
                     "User must specify an unconfirmed historical version: page " + str(number))
-            if image.get("prompt") or not source.get("legacy_review_exempt"):
+            if require_review and (image.get("prompt") or not source.get("legacy_review_exempt")):
                 require(image.get("review"), "Review the selected image before export: page " + str(number))
             rows.append({"source_page": number, "work_dir": str(path), "task_id": source["task_id"],
                          "attempt_id": image["attempt_id"], "image_sha256": image["output_sha256"],
                          "output": image["output"], "dimensions": image["output_dimensions"],
+                         "page_size": source_page_size(source, number, page),
                          "review": image.get("review"), "update_note": note})
         else:
             rows.append({"source_page": number, "work_dir": None, "task_id": None,
                          "attempt_id": None, "image_sha256": None, "review": None,
+                         "page_size": source_page_size(task, number, base_page),
                          "update_note": note or "本页未取得可用生成图。"})
     return rows
 
@@ -607,11 +690,11 @@ def check_export_target(work, task, target, suffix):
 
 def create_pdf(temporary, rows):
     with fitz.open() as pdf:
-        width, height = 210 * 72 / 25.4, 297 * 72 / 25.4
         for row in rows:
             if not row.get("attempt_id"):
                 continue
             iw, ih = row["dimensions"]
+            width, height = row.get("page_size") or LEGACY_PAGE_SIZE_POINTS
             scale = min(width / iw, height / ih)
             x, y = (width - iw * scale) / 2, (height - ih * scale) / 2
             page = pdf.new_page(width=width, height=height)
@@ -619,7 +702,8 @@ def create_pdf(temporary, rows):
             page.insert_image(fitz.Rect(x, y, x + iw * scale, y + ih * scale),
                               filename=str(asset(Path(row["work_dir"]), row["output"])))
         pdf.save(temporary, deflate=True)
-    verify_pdf(temporary, [row["dimensions"] for row in rows if row.get("attempt_id")])
+    verify_pdf(temporary, [{"dimensions": row["dimensions"], "page_size": row.get("page_size")}
+                          for row in rows if row.get("attempt_id")])
     with open(temporary, "rb") as stream:
         os.fsync(stream.fileno())
 
@@ -645,7 +729,8 @@ def publish_export(work, task, target, metadata, report_target):
             if target.exists():
                 require(digest(target) == previous.get("sha256"), "Existing PDF differs from pending export")
                 metadata["sha256"] = previous["sha256"]
-                verify_pdf(target, [r["dimensions"] for r in metadata["page_sources"] if r.get("attempt_id")])
+                verify_pdf(target, [{"dimensions": r["dimensions"], "page_size": r.get("page_size")}
+                                    for r in metadata["page_sources"] if r.get("attempt_id")])
             else:
                 target.parent.mkdir(parents=True, exist_ok=True)
                 fd, temporary = tempfile.mkstemp(prefix=".assembly-", suffix=".pdf", dir=str(target.parent))
@@ -665,17 +750,13 @@ def publish_export(work, task, target, metadata, report_target):
         pending[str(target)] = metadata
         save(work, task)  # Ownership and both hashes are durable before either publication.
         if temporary:
-            os.link(temporary, target)
+            _publish_without_replace(temporary, target)
         if not report_target.exists():
             report_target.parent.mkdir(parents=True, exist_ok=True)
             atomic_bytes(report_target, data, replace=False)
         require(digest(target) == metadata["sha256"], "Published output differs from pending export")
         require(digest(report_target) == report_hash, "Published check report differs from pending export")
-        directory = os.open(str(target.parent), os.O_RDONLY)
-        try:
-            os.fsync(directory)
-        finally:
-            os.close(directory)
+        _sync_directory(target.parent)
         history = "assemblies" if metadata["kind"] == "assembly" else "reports"
         task.setdefault(history, []).append(metadata)
         pending.pop(str(target))
@@ -686,20 +767,70 @@ def publish_export(work, task, target, metadata, report_target):
             os.unlink(temporary)
 
 
+def publish_pdf(work, task, target, metadata):
+    """Publish only the assembled PDF without creating a review sidecar."""
+    pending = task.setdefault("pending_assemblies", {})
+    previous = pending.get(str(target))
+    compatible = bool(previous and previous.get("path") == str(target)
+                      and previous.get("mapping") == metadata["mapping"]
+                      and previous.get("missing_pages") == metadata["missing_pages"]
+                      and previous.get("overlay_work_dirs", []) == metadata["overlay_work_dirs"]
+                      and previous.get("page_count") == metadata["page_count"]
+                      and previous.get("kind", "assembly") == "assembly")
+    if target.exists():
+        require(compatible, "Output already exists without a matching pending export")
+    if compatible and previous.get("page_sources"):
+        metadata["page_sources"] = previous["page_sources"]
+    temporary = None
+    try:
+        if target.exists():
+            require(digest(target) == previous.get("sha256"), "Existing PDF differs from pending export")
+            metadata["sha256"] = previous["sha256"]
+            verify_pdf(target, [{"dimensions": r["dimensions"], "page_size": r.get("page_size")}
+                                for r in metadata["page_sources"] if r.get("attempt_id")])
+        else:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            fd, temporary = tempfile.mkstemp(prefix=".assembly-", suffix=".pdf", dir=str(target.parent))
+            os.close(fd)
+            create_pdf(temporary, metadata["page_sources"])
+            metadata["sha256"] = digest(Path(temporary))
+        pending[str(target)] = metadata
+        save(work, task)
+        if temporary:
+            _publish_without_replace(temporary, target)
+        require(digest(target) == metadata["sha256"], "Published output differs from pending export")
+        _sync_directory(target.parent)
+        task.setdefault("assemblies", []).append(metadata)
+        pending.pop(str(target))
+        save(work, task)
+        return bool(previous)
+    finally:
+        if temporary and os.path.exists(temporary):
+            os.unlink(temporary)
+
+
 def assemble(args, work):
     with composition(args, work) as (task, overlays):
-        rows = compose_pages(work, task, overlays, for_pdf=True)
+        pdf_only = getattr(args, "pdf_only", False)
+        rows = compose_pages(work, task, overlays, for_pdf=True, require_review=not pdf_only)
         included = [r for r in rows if r.get("attempt_id")]
         missing = [r["source_page"] for r in rows if not r.get("attempt_id")]
         require(not missing or args.allow_partial, "Missing pages: " + ",".join(map(str, missing)))
-        require(included, "No generated pages available; use report to export the check description")
+        require(included, "No generated pages available")
         target = Path(args.output).expanduser().resolve()
         if missing and not re.search(r"(?:^|[-_. ])partial(?:$|[-_. ])", target.stem, re.IGNORECASE):
             target = target.with_name(target.stem + "-partial" + target.suffix)
         check_export_target(work, task, target, ".pdf")
+        if getattr(args, "a4", False):
+            for row in rows:
+                row["page_size"] = list(A4_PAGE_SIZE_POINTS)
+        metadata = export_metadata(task, overlays, rows, target, "assembly")
+        if pdf_only:
+            recovered = publish_pdf(work, task, target, metadata)
+            return {"output": str(target), "pages": len(included),
+                    "mapping": metadata["mapping"], "missing_pages": missing, "recovered": recovered}
         report_target = target.with_name(target.stem + "_逐页检查说明.md")
         check_export_target(work, task, report_target, ".md")
-        metadata = export_metadata(task, overlays, rows, target, "assembly")
         recovered = publish_export(work, task, target, metadata, report_target)
         return {"output": str(target), "report": str(report_target), "pages": len(included),
                 "mapping": metadata["mapping"], "missing_pages": missing, "recovered": recovered}
@@ -745,6 +876,9 @@ def main():
             command.add_argument("--reuse-overlays", action="store_true")
             if name == "assemble":
                 command.add_argument("--allow-partial", action="store_true")
+                command.add_argument("--pdf-only", action="store_true")
+                command.add_argument("--a4", action="store_true",
+                                    help="适用用户明确要求时，将所有输出页统一为 A4")
     args = parser.parse_args()
     work = Path(args.work_dir).expanduser().resolve()
     if args.command == "status":

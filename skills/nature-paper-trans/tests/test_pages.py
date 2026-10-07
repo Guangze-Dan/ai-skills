@@ -62,10 +62,11 @@ class PagesTests(unittest.TestCase):
         self.assertNotEqual(code, 0, value)
         return value
 
-    def source_pdf(self, count):
+    def source_pdf(self, count, sizes=None):
         with fitz.open() as pdf:
             for number in range(1, count + 1):
-                page = pdf.new_page(width=80, height=100)
+                width, height = (sizes or [(80, 100)] * count)[number - 1]
+                page = pdf.new_page(width=width, height=height)
                 page.insert_text((8, 20), "Page %d" % number, fontsize=8)
             pdf.save(self.source)
 
@@ -113,12 +114,13 @@ class PagesTests(unittest.TestCase):
         rows = [line for line in text.splitlines() if re.match(r"^\|\s*\d+\s*\|", line)]
         return text, rows
 
-    def assert_pdf(self, path, colors):
+    def assert_pdf(self, path, colors, page_sizes=None):
+        page_sizes = page_sizes or [(80, 100)] * len(colors)
         with fitz.open(path) as pdf:
             self.assertEqual(len(pdf), len(colors))
-            for page, color in zip(pdf, colors):
-                self.assertAlmostEqual(page.rect.width, 210 * 72 / 25.4, places=2)
-                self.assertAlmostEqual(page.rect.height, 297 * 72 / 25.4, places=2)
+            for page, color, page_size in zip(pdf, colors, page_sizes):
+                self.assertAlmostEqual(page.rect.width, page_size[0], places=2)
+                self.assertAlmostEqual(page.rect.height, page_size[1], places=2)
                 self.assertEqual(page.get_text(), "")
                 images = page.get_images(full=True)
                 self.assertEqual(len(images), 1)
@@ -263,6 +265,37 @@ class PagesTests(unittest.TestCase):
         original = {path: Path(path).read_bytes() for path in (result["output"], result["report"])}
         self.rejected("assemble", "--output", target)
         self.assertEqual({path: Path(path).read_bytes() for path in original}, original)
+
+    def test_pdf_only_assembly_skips_review_and_report(self):
+        self.prepare()
+        attempt = self.reserve()
+        self.record(1, attempt, self.red)
+        target = self.root / "pdf-only.pdf"
+        result = self.ok("assemble", "--output", target, "--pdf-only")
+        self.assertEqual(result["output"], str(target.resolve()))
+        self.assertNotIn("report", result)
+        self.assertTrue(target.is_file())
+        self.assertFalse(target.with_name(target.stem + "_逐页检查说明.md").exists())
+        self.assert_pdf(target, [(240, 10, 20)])
+
+    def test_assembly_preserves_mixed_source_page_sizes(self):
+        self.source_pdf(2, sizes=[(80, 100), (140, 70)])
+        self.ok("prepare", "--pdf", self.source, "--pages", "all", "--dpi", 72)
+        first = self.reserve(1)
+        self.record(1, first, self.red)
+        second = self.reserve(2)
+        self.record(2, second, self.blue)
+        target = self.root / "mixed-sizes.pdf"
+        result = self.ok("assemble", "--output", target, "--pdf-only")
+        self.assert_pdf(target, [(240, 10, 20), (20, 40, 240)], [(80, 100), (140, 70)])
+
+    def test_explicit_a4_option_converts_all_pages(self):
+        self.prepare()
+        attempt = self.reserve()
+        self.record(1, attempt, self.red)
+        target = self.root / "a4.pdf"
+        self.ok("assemble", "--output", target, "--pdf-only", "--a4")
+        self.assert_pdf(target, [(240, 10, 20)], [(210 * 72 / 25.4, 297 * 72 / 25.4)])
 
     def test_report_has_all_four_page_outcomes_and_escapes_table_content(self):
         self.prepare(4)
