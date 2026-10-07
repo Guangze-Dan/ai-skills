@@ -1,6 +1,8 @@
 # 仓库维护产物
 .backup/
 _setup/
+tools/.sync-state.json
+tools/sync.log
 
 # 系统与临时文件
 Thumbs.db

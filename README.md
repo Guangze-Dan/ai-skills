@@ -13,8 +13,9 @@ ai-skills/
 │   ├── android-mtp/        #   小米手机 MTP/USB 驱动修复 + APK 推送
 │   ├── android-ui/         #   Android 屏幕 UI dump 解析
 │   ├── productivity/       #   UI 造图 / 课表读取 / 启动器
-│   └── legacy/             #   一次性脚本存档
-├── tools/                  # 仓库维护工具（gen_registry.ps1）
+│   ├── legacy/             #   一次性脚本存档
+│   └── inbox/<日期>/       #   钩子自动归档的新任务脚本（暂存区）
+├── tools/                  # 仓库维护工具（gen_registry.ps1、sync_task_scripts.ps1）
 ├── registry.json           # 全部 skill 的机器可读索引（name / dir / description）
 ├── AGENT.md                # 给 AI agent 看的入口说明
 ├── install.ps1             # 一键接入：把本仓库 junction 到各 agent 的 skills 目录
@@ -66,6 +67,19 @@ New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "D:\ai
 - **修改 skill**：随便在哪个 agent 目录改（都是同一个文件），或在仓库里改，然后 `git add -A && git commit -m "..." && git push`。
 - **本地新建了 skill 忘了进仓库**：跑 `powershell -ExecutionPolicy Bypass -File collect.ps1 -Push`，自动收进仓库并推送。
 - **更新到最新**：`git pull` 即可（junction 指向仓库目录，pull 完所有 agent 立即生效）。
+
+## 任务脚本自动归档（已生效，无需手动操作）
+
+已注册 ZCode 全局钩子（`~/.zcode/cli/config.json`，事件 `UserPromptSubmit` + `Stop`，Claude Code 同步注册于 `~/.claude/settings.json`），每次提交新任务/回合结束时自动运行 `tools/sync_task_scripts.ps1`：
+
+- **监视范围**：`D:\Zcode\.zcode\workspace\default` 和 `D:\Zcode` 根目录的脚本文件（`.ps1 .py .bat .cmd .sh .js .ts .ahk`，仅根层、非递归，≤2MB）。要扩大范围就往脚本顶部 `$WatchRoots` 数组加路径。
+- **新脚本** → 自动复制到 `scripts/inbox/<日期>/`，自动 commit + push 到 GitHub。
+- **脚本被修改** → 就地更新同一仓库文件（此前收集的 11 个脚本已建立映射，改原件即可）。
+- **无变化** → 快速跳过（毫秒级）。
+- 运行日志：`tools/sync.log`；状态：`tools/.sync-state.json`（两者均不入库）。
+
+`scripts/inbox/` 是自动归档的暂存区，隔段时间把里面的文件挪进合适的主题目录即可（挪动后若工作区原件再被修改，inbox 会重新出现副本，删掉即可）。agent 也可以在任务中直接把脚本放进 `scripts/<主题>/` 自己提交，两种方式不冲突。
+
 
 ## Skills 一览（37 个）
 
