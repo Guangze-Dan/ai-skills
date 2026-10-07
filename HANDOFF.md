@@ -1,7 +1,7 @@
 # HANDOFF — ai-skills 统一真源系统 · 交接文档
 
 > 给接手的 AI：本文档自包含。读完即可继续维护、扩展、排障这套系统，无需向用户追问历史背景。
-> 交接时间：2026-10-07 · 最近更新：2026-10-07（同日第二场：**新机器迁移已完成并验证**；第三场：旧机器侧已对齐）· 用户：但光泽，GitHub: **Guangze-Dan**
+> 交接时间：2026-10-07 · 最近更新：2026-10-07（同日第二场：**新机器迁移已完成并验证**；第三场：旧机器侧已对齐；第四场：windows-mcp 补齐两台机器）· 用户：但光泽，GitHub: **Guangze-Dan**
 >
 > **2026-10-07 第三场（旧机器侧，`C:\Users\32204`）**：旧机器仍在服役并与 origin 对齐：补齐了 10 个新 skill 的 junction；`tools/sync_task_scripts.ps1` 的 `$WatchRoots` 已改为**多机器列表**（不存在的路径自动跳过），两台机器共用同一脚本；`nature-paper-trans` 的技能修订已从旧机器工作区入库（含 Windows 版 `pages.py`）。
 
@@ -135,7 +135,7 @@ gh repo edit ai-skills --visibility public --accept-visibility-change-consequenc
 8. 仓库 `.gitattributes` 对 `.ps1/.bat` 强制 CRLF、`.py` 强制 LF，git 会打 CRLF 警告——无害，勿因警告改行尾。
 9. GitHub 推送偶发 `Empty reply from server`（瞬时网络），重试即可。
 10. 仓库私有、无 LICENSE、无 CI；junction 只在本机有效，换机器靠 clone + install.ps1 + 手动注册钩子重建。
-11. **windows-mcp 已装**（2026-10-07）：uv tool 装于 `C:\Users\Dan\.local\bin\windows-mcp.exe`（该目录已加入用户 PATH），`C:\Users\Dan\.local\bin`；已在 ZCode `config.json` / Claude Code `.claude.json` / Codex `config.toml` 三处注册同一 stdio 服务器（`windows-mcp serve`，env 关闭匿名遥测，超时 60s/120s）。uv 经 pip 装于 `C:\Users\Dan\AppData\Roaming\Python\Python314\Scripts\uv.exe`（该 Scripts 目录不在 PATH）。`.claude.json` 改动前备份在 `~/.claude.json.bak-windowsmcp`。
+11. **windows-mcp 已装**（2026-10-07）：uv tool 装于 `C:\Users\Dan\.local\bin\windows-mcp.exe`（该目录已加入用户 PATH），`C:\Users\Dan\.local\bin`；已在 ZCode `config.json` / Claude Code `.claude.json` / Codex `config.toml` 三处注册同一 stdio 服务器（`windows-mcp serve`，env 关闭匿名遥测，超时 60s/120s）。uv 经 pip 装于 `C:\Users\Dan\AppData\Roaming\Python\Python314\Scripts\uv.exe`（该 Scripts 目录不在 PATH）。`.claude.json` 改动前备份在 `~/.claude.json.bak-windowsmcp`。**旧机器（`C:\Users\32204`）同日第四场也已装好**：uv 经 pip 入 Python311、`uv tool install windows-mcp`（0.8.7）→ `C:\Users\32204\.local\bin\windows-mcp.exe`（已 `uv tool update-shell` 加入用户 PATH）；ZCode `config.json` / Codex `config.toml` / 新建 `~/.claude.json`（该机未装 claude CLI）三处注册，改动前均备份 `.bak-windowsmcp`；验证：`codex mcp list` 显示 enabled、mcporter 实测连通（20 tools）。
 
 ## 九、建议的下一步（按优先级）
 
