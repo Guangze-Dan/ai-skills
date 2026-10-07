@@ -1,2 +1,2 @@
-# Self-test marker for the ai-skills auto-sync hook.
-Write-Host "hook selftest ok"
+# Self-test marker v2 (edit path check)
+Write-Host "hook selftest ok v2"
