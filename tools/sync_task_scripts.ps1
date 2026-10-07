@@ -41,15 +41,17 @@ $SeedMap = @{
 try {
     # ---- load state: $files is a plain hashtable { source-path-lc: {hash, dest} }
     $files = @{}
+    $baselined = $false
     if (Test-Path $StateFile) {
         try {
             $loaded = Get-Content $StateFile -Raw -Encoding UTF8 | ConvertFrom-Json
             if ($loaded.files) {
                 foreach ($p in $loaded.files.PSObject.Properties) { $files[$p.Name] = $p.Value }
             }
+            $baselined = [bool]$loaded.baselined
         } catch { $files = @{} }
     }
-    $seeding = ($files.Count -eq 0)   # first run: baseline only, import nothing
+    $seeding = -not $baselined   # first run: baseline only, import nothing
 
     $Git = 'C:\Program Files\Git\cmd\git.exe'
     if (-not (Test-Path $Git)) { $Git = 'git' }
@@ -134,7 +136,7 @@ try {
     }
 
     # ---- persist state + log ----------------------------------------------
-    [pscustomobject]@{ files = $files } | ConvertTo-Json -Depth 6 | Out-File $StateFile -Encoding utf8
+    [pscustomobject]@{ baselined = $true; files = $files } | ConvertTo-Json -Depth 6 | Out-File $StateFile -Encoding utf8
     $line = "{0} | tracked={1} imported={2} committed={3} pushed={4}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $files.Count, $imports.Count, $committed, $pushed
     Add-Content -LiteralPath $LogFile -Value $line -Encoding UTF8
 } catch {
