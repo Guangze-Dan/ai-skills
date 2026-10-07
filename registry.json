@@ -1,12 +1,37 @@
 {
     "updated":  "2026-10-07",
     "source":  "https://github.com/Guangze-Dan/ai-skills",
-    "count":  37,
+    "count":  47,
     "skills":  [
+                   {
+                       "name":  "academic-paper",
+                       "dir":  "skills/academic-paper",
+                       "description":  ""
+                   },
+                   {
+                       "name":  "academic-paper-reviewer",
+                       "dir":  "skills/academic-paper-reviewer",
+                       "description":  ""
+                   },
+                   {
+                       "name":  "academic-pipeline",
+                       "dir":  "skills/academic-pipeline",
+                       "description":  ""
+                   },
                    {
                        "name":  "agent-reach",
                        "dir":  "skills/agent-reach",
                        "description":  "MUST USE when user wants to 调研/research/搜索/search/查/找/look up anything on the internet — e.g. 全网调研 X / 帮我调研一下 X / 查一下 X / 搜搜 X / 看看大家怎么评价 X / X 上有什么讨论 / research this topic。  Also MUST USE when user mentions any platform or shares any URL/链接: 小红书/xiaohongshu/xhs, Twitter/推特/X, B站/bilibili, Reddit, Facebook, Instagram, V2EX, LinkedIn/领英/Boss直聘/招聘/求职/jobs, YouTube, GitHub code search, 小宇宙播客, 雪球/股票行情, RSS feeds, or any web URL.  16 platforms, multi-backend routing (OpenCLI / per-platform CLIs / APIs). Zero config for 6 channels. Run `agent-reach doctor --json` to see which backend serves each platform right now.  NOT for: 写报告/数据分析/翻译等内容加工（本 skill 只负责从互联网获取内容）； 发帖/评论/点赞等写操作；已有专门 skill 的平台（先用专门 skill）。  【路由方式】SKILL.md 包含路由表和常用命令，复杂场景需按需阅读对应分类的 references/*.md。 分类：search / social (小红书/推特/B站/V2EX/Reddit/Facebook/Instagram) / career(LinkedIn/Boss直聘) / dev(github) / web(网页/文章/RSS) / video(YouTube/B站/播客) / finance(雪球/股票)。 metadata: homepage: https://github.com/Panniantong/Agent-Reach"
+                   },
+                   {
+                       "name":  "citation-check-skill",
+                       "dir":  "skills/citation-check-skill",
+                       "description":  ""
+                   },
+                   {
+                       "name":  "deep-research",
+                       "dir":  "skills/deep-research",
+                       "description":  ""
                    },
                    {
                        "name":  "hatch-pet",
@@ -17,6 +42,11 @@
                        "name":  "hindsight-coding-agent",
                        "dir":  "skills/hindsight-coding-agent",
                        "description":  "How this machine\u0027s Hindsight coding-agent memory works — the plugin behind the 🧠 banner. Use when the user says \"store/remember this in hindsight\", asks what the memory/knowledge pages are, wants to configure per-repo memory (disable, rename banks, git depth), or something memory-related looks broken."
+                   },
+                   {
+                       "name":  "humanizer",
+                       "dir":  "skills/humanizer",
+                       "description":  ""
                    },
                    {
                        "name":  "hyperframes",
@@ -64,6 +94,11 @@
                        "description":  "Use when working with a person on a HyperFrames project in Studio: first, whether their message asks for a change at all (questions, loose ideas and \"don\u0027t change anything\" get an answer and a plan, not an edit); for a new film, the plan, storyboard and build order that the HyperFrames launch films follow; and how the timeline should be laid out so it reads well (one caption track, one element kind per track, every scene a sub-composition) and where captions and key content may sit (safe zones). Don\u0027t use for how to perform an individual edit (split, trim, retime, volume, copy, swap): that is `creator-editing-recipes.md` in `/hyperframes-core`."
                    },
                    {
+                       "name":  "image-to-editable-ppt",
+                       "dir":  "skills/image-to-editable-ppt",
+                       "description":  "Rebuild slide images, image-based or scanned PPT/PPTX files, and PDF decks into object-level editable PowerPoint (.pptx). Use whenever the user provides any visual slide source and wants slides they can edit — \"make this PPT editable\", \"把图片/截图转成可编辑 PPT\", \"this PDF is a scanned deck, restore it\", recreating slides from screenshots, reconstructing slide objects, or preserving speaker notes — even if they do not say \"convert\". Not for authoring new presentations from scratch."
+                   },
+                   {
                        "name":  "impeccable",
                        "dir":  "skills/impeccable",
                        "description":  "Use when the user wants to design, redesign, shape, critique, audit, polish, clarify, distill, harden, optimize, adapt, animate, colorize, extract, or otherwise improve a frontend interface. Covers websites, landing pages, dashboards, product UI, app shells, components, forms, settings, onboarding, and empty states. Handles UX review, visual hierarchy, information architecture, cognitive load, accessibility, performance, responsive behavior, theming, anti-patterns, typography, fonts, spacing, layout, alignment, color, motion, micro-interactions, UX copy, error states, edge cases, i18n, and reusable design systems or tokens. Also use for bland designs that need to become bolder or more delightful, loud designs that should become quieter, live browser iteration on UI elements, or ambitious visual effects that should feel technically extraordinary. Not for backend-only or non-UI tasks."
@@ -72,6 +107,11 @@
                        "name":  "lightpanda",
                        "dir":  "skills/lightpanda",
                        "description":  "Lightweight headless browser for AI agents (Lightpanda 1.0.0), running inside WSL2 on this machine and reachable from Windows via CDP at http://127.0.0.1:9222. Use when you need to read, render, crawl or screenshot web pages cheaply — about 10x lighter and much faster to start than Chrome — without needing the full browser-use plugin. Covers starting/stopping the server, health checks, CDP connections (Playwright/Puppeteer/raw WebSocket), and troubleshooting the WSL setup. Not for JS-heavy SPA interaction that requires full Chrome fidelity — use the browser-use plugin instead."
+                   },
+                   {
+                       "name":  "literature-reviewer-skill",
+                       "dir":  "skills/literature-reviewer-skill",
+                       "description":  ""
                    },
                    {
                        "name":  "media-use",
@@ -187,6 +227,16 @@
                        "name":  "paper-spine",
                        "dir":  "skills/paper-spine",
                        "description":  "Research, write, review and deliver evidence-bound papers in one task, with user choices, real files, editable outputs and same-task revision."
+                   },
+                   {
+                       "name":  "zo-read-paper",
+                       "dir":  "skills/zo-read-paper",
+                       "description":  ""
+                   },
+                   {
+                       "name":  "zotero-connector",
+                       "dir":  "skills/zotero-connector",
+                       "description":  ""
                    }
                ]
 }

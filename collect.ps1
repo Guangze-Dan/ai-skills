@@ -45,19 +45,19 @@ foreach ($src in $Sources) {
             $same = $false
             try { $same = ((Compare-Object (Get-DirSignature $dir.FullName) (Get-DirSignature $repoDir)) -eq $null) } catch {}
             if ($same) {
-                $item.Delete(); New-Item -ItemType Junction -Path $dir.FullName -Target $repoDir | Out-Null
+                Remove-Item -LiteralPath $dir.FullName -Recurse -Force; New-Item -ItemType Junction -Path $dir.FullName -Target $repoDir | Out-Null
                 $seen[$dir.Name] = $true; $relinked++
                 Write-Host ("  unchanged -> relinked  " + $dir.Name)
                 continue
             }
             Copy-Item (Join-Path $dir.FullName '*') $repoDir -Recurse -Force
             Write-Host ("  updated   " + $dir.Name)
-            $item.Delete(); New-Item -ItemType Junction -Path $dir.FullName -Target $repoDir | Out-Null
+            Remove-Item -LiteralPath $dir.FullName -Recurse -Force; New-Item -ItemType Junction -Path $dir.FullName -Target $repoDir | Out-Null
             $updated++
         } else {
             Copy-Item $dir.FullName $repoDir -Recurse
             Write-Host ("  added     " + $dir.Name)
-            $item.Delete(); New-Item -ItemType Junction -Path $dir.FullName -Target $repoDir | Out-Null
+            Remove-Item -LiteralPath $dir.FullName -Recurse -Force; New-Item -ItemType Junction -Path $dir.FullName -Target $repoDir | Out-Null
             $added++
         }
         $seen[$dir.Name] = $true
