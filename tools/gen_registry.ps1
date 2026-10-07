@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 # 扫描 skills/*/SKILL.md 的 YAML frontmatter，重建 registry.json
 $ErrorActionPreference = 'Stop'
 $RepoSkills = Join-Path $PSScriptRoot '..\skills'

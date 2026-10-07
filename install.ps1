@@ -1,12 +1,13 @@
 #Requires -Version 5.1
 <#
 .SYNOPSIS
-  把本仓库的 skills 以 NTFS junction 接入各 AI agent 的 skills 目录（统一真源，所有 agent 共用一份）。
+  Link every skill in this repo into each AI agent's skills directory via NTFS junction.
+  The repo stays the single source of truth; all agents read the same files.
 
 .USAGE
-  powershell -ExecutionPolicy Bypass -File install.ps1              # 用户级：zcode / agents / claude / codex
-  powershell -ExecutionPolicy Bypass -File install.ps1 -Local       # 项目级：当前目录 .claude\skills 和 .agents\skills
-  powershell -ExecutionPolicy Bypass -File install.ps1 -Remove      # 只移除指向本仓库的 junction
+  powershell -ExecutionPolicy Bypass -File install.ps1              # user level: zcode / agents / claude / codex
+  powershell -ExecutionPolicy Bypass -File install.ps1 -Local       # project level: .claude\skills and .agents\skills in cwd
+  powershell -ExecutionPolicy Bypass -File install.ps1 -Remove      # remove only junctions pointing into this repo
 #>
 param(
     [switch]$Local,
@@ -34,7 +35,7 @@ if ($Local) {
 $skills = Get-ChildItem $RepoSkills -Directory
 Write-Host ("Repo skills: {0}  ({1})" -f $skills.Count, $RepoSkills)
 
-# 目录签名：相对路径 + 大小 + 修改时间，用于判断本地副本与仓库是否一致
+# Directory signature: relative path + size + mtime, used to compare a local copy with the repo copy
 function Get-DirSignature($dir) {
     Get-ChildItem $dir -Recurse -File -Force | ForEach-Object {
         $_.FullName.Substring($dir.Length + 1) + '|' + $_.Length + '|' + $_.LastWriteTimeUtc.Ticks
@@ -70,27 +71,39 @@ foreach ($agent in $targets.Keys) {
         if (Test-Path $dest) {
             $item = Get-Item $dest -Force
             if ($item.LinkType -eq 'Junction') {
-                if (Test-PointsToRepo $item) { continue }               # 已接入，跳过
-                $item.Delete()                                          # 指向别处的旧链接，重建
-                Write-Host "  relink   $($skill.Name) (旧 junction 指向别处)"
+                if (Test-PointsToRepo $item) { continue }               # already linked
+                $item.Delete()                                          # stale junction elsewhere, recreate
+                Write-Host "  relink   $($skill.Name) (old junction pointed elsewhere)"
             } else {
-                # 真实目录：与仓库一致则直接替换，不一致先备份
+                # Real directory: identical to repo -> replace directly, otherwise back it up first
                 $same = $false
                 try { $same = ((Compare-Object (Get-DirSignature $dest) (Get-DirSignature $skill.FullName)) -eq $null) } catch {}
                 if (-not $same) {
                     $stamp = Get-Date -Format 'yyyyMMdd-HHmmss'
                     $bak = Join-Path (Join-Path $BackupRoot $stamp) $agent
                     New-Item -ItemType Directory -Force -Path $bak | Out-Null
-                    Move-Item $dest (Join-Path $bak $skill.Name)
-                    Write-Host "  backup   $($skill.Name) -> .backup\$stamp\$agent\"
+                    try {
+                        Move-Item $dest (Join-Path $bak $skill.Name) -ErrorAction Stop
+                        Write-Host "  backup   $($skill.Name) -> .backup\$stamp\$agent\"
+                    } catch {
+                        Write-Host ("  SKIP     {0} (in use: {1})" -f $skill.Name, $_.Exception.Message)
+                        continue
+                    }
                 } else {
-                    Remove-Item $dest -Recurse -Force
+                    try { Remove-Item $dest -Recurse -Force -ErrorAction Stop } catch {
+                        Write-Host ("  SKIP     {0} (in use; re-run install.ps1 later to finish)" -f $skill.Name)
+                        continue
+                    }
                 }
             }
         }
-        New-Item -ItemType Junction -Path $dest -Target $skill.FullName | Out-Null
-        if (-not ($item -and $item.LinkType -eq 'Junction')) { Write-Host "  linked   $($skill.Name)" }
+        try {
+            New-Item -ItemType Junction -Path $dest -Target $skill.FullName -ErrorAction Stop | Out-Null
+            Write-Host "  linked   $($skill.Name)"
+        } catch {
+            Write-Host ("  SKIP     {0} (junction failed: {1})" -f $skill.Name, $_.Exception.Message)
+        }
     }
 }
 
-if ($Remove) { Write-Host "`nDone (removed)." } else { Write-Host "`nDone. 所有 agent 的 skills 目录已指向本仓库（唯一真源）。" }
+if ($Remove) { Write-Host "`nDone (removed)." } else { Write-Host "`nDone. All agent skill dirs now point to this repo (single source of truth)." }

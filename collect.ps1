@@ -1,4 +1,4 @@
-#Requires -Version 5.1
+﻿#Requires -Version 5.1
 <#
 .SYNOPSIS
   反向收集：把各 agent 目录里新增/修改的 skill 收进本仓库（唯一真源），并重建 registry.json。
