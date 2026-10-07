@@ -11,12 +11,13 @@
 
 $ErrorActionPreference = 'Stop'
 
-$Repo       = 'D:\Zcode\ai-skills'
+$Repo       = Split-Path -Parent $PSScriptRoot   # repo root = parent of this tools\ dir
 $StateFile  = Join-Path $Repo 'tools\.sync-state.json'
 $LogFile    = Join-Path $Repo 'tools\sync.log'
+# Watch roots are machine-specific; missing paths are skipped automatically.
 $WatchRoots = @(
-    'D:\Zcode\.zcode\workspace\default',
-    'D:\Zcode'
+    'E:\Zcode数据\.zcode\workspace\default',
+    'E:\Zcode数据'
 )
 $Extensions = @('.ps1', '.py', '.bat', '.cmd', '.sh', '.js', '.ts', '.ahk')
 $MaxBytes   = 2MB
@@ -137,6 +138,6 @@ try {
     $line = "{0} | tracked={1} imported={2} committed={3} pushed={4}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $files.Count, $imports.Count, $committed, $pushed
     Add-Content -LiteralPath $LogFile -Value $line -Encoding UTF8
 } catch {
-    try { Add-Content -LiteralPath 'D:\Zcode\ai-skills\tools\sync.log' -Value ("{0} | ERROR {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $_.Exception.Message) -Encoding UTF8 } catch {}
+    try { Add-Content -LiteralPath $LogFile -Value ("{0} | ERROR {1}" -f (Get-Date -Format 'yyyy-MM-dd HH:mm:ss'), $_.Exception.Message) -Encoding UTF8 } catch {}
 }
 exit 0
