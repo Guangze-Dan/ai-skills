@@ -3,7 +3,7 @@
 > 给接手的 AI：本文档自包含。读完即可继续维护、扩展、排障这套系统，无需向用户追问历史背景。
 > 首建：2026-10-07 · 最近更新：2026-10-08 · 用户：但光泽，GitHub: **Guangze-Dan**
 >
-> 会话史速览：①旧机器（`32204`）搭建全系统 → ②新机器（`Dan`）迁移+收集至 47 skills → ③旧机器对齐（多机 WatchRoots、nature-paper-trans 修订）→ ④windows-mcp 补齐两台机器 → ⑤hyperframes 族升 v0.8.140、钩子自动触发实证 → ⑥2026-10-08 新装 11 skills（→58）+ yt-dlp / cli-anything-wps 工具。
+> 会话史速览：①旧机器（`32204`）搭建全系统 → ②新机器（`Dan`）迁移+收集至 47 skills → ③旧机器对齐（多机 WatchRoots、nature-paper-trans 修订）→ ④windows-mcp 补齐两台机器 → ⑤hyperframes 族升 v0.8.140、钩子自动触发实证 → ⑥2026-10-08 新装 11 skills（→58）+ yt-dlp / cli-anything-wps 工具 → ⑦2026-10-08 旧机器同步：pull 5 提交、11 新 skill 已链接（58×4）、补装 cli-anything-wps 1.0.0（本机有 WPS Office 2023）。
 
 ---
 
@@ -119,7 +119,7 @@ $env:NODE_OPTIONS="--use-env-proxy" ; $env:HTTPS_PROXY="http://127.0.0.1:7897" ;
 **已装工具（新机器，均在 PATH）：**
 - **windows-mcp**（uv tool，`C:\Users\Dan\.local\bin\windows-mcp.exe`；AI 操控 Windows 桌面）。ZCode `config.json` mcp.servers / Claude `.claude.json` mcpServers / Codex `config.toml` mcp_servers 三处注册，env 关匿名遥测；`.claude.json` 备份 `~/.claude.json.bak-windowsmcp`。旧机器同日也已装（Python311 + uv，`C:\Users\32204\.local\bin\`）。
 - **yt-dlp** 2026.08.19（pip 用户级；即用户说的 "yt-dip"，GitHub 上 yt-dIp 只是 yt-dlp 的 fork）。
-- **cli-anything-wps** 1.0.0（pip，来自 harness-anything monorepo；COM 控制 WPS 文字/表格/演示，47 命令，需装 WPS Office 才能实际干活，Windows 专属）。photoshop/zotero harness 技能已入库，装对应软件即可用。
+- **cli-anything-wps** 1.0.0（pip，来自 harness-anything monorepo；COM 控制 WPS 文字/表格/演示，47 命令，需装 WPS Office 才能实际干活，Windows 专属）。photoshop/zotero harness 技能已入库，装对应软件即可用。**旧机器 2026-10-08 已同样安装**：PyPI 无此包，可用装法 `pip install git+https://github.com/yb2460/cli-anything-wps.git`（独立仓库）；旧机器有 WPS Office 2023（雨糖科技特别版），装后实测正常。
 
 ## 九、建议的下一步（按优先级）
 
