@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 """Reproduce the tunnel 3D-model schematic figure in Visio (COM automation)."""
 import json
+import math
 import win32com.client as w
 
 PX = 100.0          # image pixels per inch
@@ -129,9 +130,38 @@ def arrow(x1, y1, x2, y2, color=PURPLE, wt=2.5):
     return ln
 
 
-def draw_red(name, wt=1.5):
+CIRCLES = {"p3": (206, 180), "p4": (206, 477), "p1": (1523, 186), "p2": (1522, 477)}
+PANEL_R = 47
+
+
+def _snap_circle(pts, cx, cy, r):
+    """Push an endpoint that stops just short of a tunnel circle onto its rim, so the
+    red line meets the black edge without crossing it."""
+    for ei, ni in ((0, 1), (-1, -2)):
+        ex, ey = pts[ei]
+        nx, ny = pts[ni]
+        if math.hypot(ex - cx, ey - cy) > r + 16:
+            continue
+        dx, dy = ex - nx, ey - ny
+        n = math.hypot(dx, dy)
+        if n < 1e-6:
+            continue
+        dx, dy = dx / n, dy / n
+        for t in range(1, 40):
+            qx, qy = ex + dx * t, ey + dy * t
+            if math.hypot(qx - cx, qy - cy) <= r - 6:
+                pts[ei] = [round(qx, 1), round(qy, 1)]
+                break
+    return pts
+
+
+def draw_red(name, wt=1.0):
+    circ = CIRCLES.get(name)
     for path in REDPATHS[name]:
-        polyline([(p[0], p[1]) for p in path], RED, wt)
+        pts = [list(p) for p in path]
+        if circ:
+            pts = _snap_circle(pts, circ[0], circ[1], PANEL_R)
+        polyline([(p[0], p[1]) for p in pts], RED, wt)
 
 
 # ============================ PANELS ============================
@@ -148,6 +178,9 @@ draw_red("p3", 1.0)
 c = roval(206, 180, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
+fr = rrect(2, 58, 402, 312)
+nofill(fr)
+setline(fr, BLACK, 1.4)
 b = rrect(291, 258, 397, 302)
 setfill(b, M10)
 noline(b)
@@ -162,6 +195,9 @@ draw_red("p4", 1.0)
 c = roval(206, 477, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
+fr = rrect(2, 355, 402, 608)
+nofill(fr)
+setline(fr, BLACK, 1.4)
 b = rrect(291, 554, 397, 598)
 setfill(b, M10)
 noline(b)
@@ -176,6 +212,9 @@ draw_red("p1", 1.0)
 c = roval(1523, 186, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
+fr = rrect(1319, 58, 1720, 318)
+nofill(fr)
+setline(fr, BLACK, 1.4)
 b = rrect(1608, 261, 1714, 305)
 setfill(b, M75)
 noline(b)
@@ -190,6 +229,9 @@ draw_red("p2", 1.0)
 c = roval(1522, 477, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
+fr = rrect(1319, 356, 1720, 608)
+nofill(fr)
+setline(fr, BLACK, 1.4)
 b = rrect(1608, 554, 1714, 598)
 setfill(b, M75)
 noline(b)
@@ -216,28 +258,8 @@ bb = rrect(796, T, 1035, B)
 setfill(bb, (205, 221, 224))
 noline(bb)
 
-DIVS = [561, 678, 796, 914, 1035]
-# vertical dashed divisions
-for xd in DIVS:
-    ln = rline(xd, T, xd, B)
-    setline(ln, BLACK, 0.9, dash=True)
-# top-face dashed depth lines
-for xd in DIVS:
-    ln = rline(xd, T, xd + DX, T - DY)
-    setline(ln, BLACK, 0.9, dash=True)
-# bottom "hidden" dashed depth lines (stop at the coloured band edge, as in original)
-for xd in [442, 561, 678, 796, 914]:
-    ln = rline(xd, B, xd + DX, B - DY)
-    setline(ln, BLACK, 0.9, dash=True)
-# horizontal reference dashed lines (four, full width, as in the original)
-for yy in (368, 420, 471):
-    ln = rline(L, yy, R + DX, yy)
-    setline(ln, BLACK, 0.9, dash=True)
-ln = rline(L, 493, R + DX, 493)
-setline(ln, BLACK, 1.5, dash=True)
-
-# borehole / bolt ellipses (drawn first, crack goes on top as in the original)
-# (cx, rx, fill, outline, weight, dashed)  -- slender ovals, centre y=421
+# borehole / bolt ellipses (drawn first; the crack runs over them, as in the original)
+# (cx, rx, fill, outline, weight, dashed)  -- slender ovals, centre y=423
 ELL = [(505, 18, (255, 255, 255), BLACK, 1.4, True),
        (627, 15, (235, 235, 235), (60, 60, 60), 1.0, True),
        (742, 15, (235, 235, 235), (60, 60, 60), 1.0, True),
@@ -251,6 +273,42 @@ for cx, rx, fc, oc, wt, dash in ELL:
 
 # red crack (extracted from the original figure)
 draw_red("box", 1.0)
+
+# --- black grid lines are drawn ON TOP of the red crack, so red never crosses them ---
+DIVS = [561, 678, 796, 914, 1035]
+# vertical dashed divisions
+for xd in DIVS:
+    ln = rline(xd, T, xd, B)
+    setline(ln, BLACK, 0.9, dash=True)
+# top-face dashed depth lines
+for xd in DIVS:
+    ln = rline(xd, T, xd + DX, T - DY)
+    setline(ln, BLACK, 0.9, dash=True)
+# bottom "hidden" dashed depth lines (stop at the coloured band edge, as in original)
+for xd in [442, 561, 678, 796, 914]:
+    ln = rline(xd, B, xd + DX, B - DY)
+    setline(ln, BLACK, 0.9, dash=True)
+# horizontal reference dashed lines (four, full width, as in the original); the two
+# that run through the ovals are broken around them so the ovals still hide the lines
+HOLES = [(505, 20), (627, 17), (742, 17), (858, 17), (974, 17), (1191, 17)]
+
+
+def hline(y, wt):
+    xs = L
+    for cx, rx in HOLES:
+        a, b = cx - rx, cx + rx
+        if a > xs:
+            ln = rline(xs, y, a, y)
+            setline(ln, BLACK, wt, dash=True)
+        xs = max(xs, b)
+    if xs < R + DX:
+        ln = rline(xs, y, R + DX, y)
+        setline(ln, BLACK, wt, dash=True)
+
+
+for yy in (368, 420, 471):
+    hline(yy, 0.9)
+hline(493, 1.5)
 
 # ============================ DIMENSIONS ============================
 DIMY = 645
