@@ -214,14 +214,15 @@ for cx in (505, 1191):
     e = roval(cx, TUBE_Y, 18, 52)
     setfill(e, (196, 224, 244))
     setline(e, TUN, 1.6)
-text(592, TUBE_Y, "Φ400 (P)", 16, TUN, boxw=170, boxh=34)
+text(690, TUBE_Y, "Φ400 (P)", 16, TUN, boxw=180, boxh=34)
 
-# small caverns: same green squares as in the four sections, on both flanks
-for cx in (760, 958, 1072):
-    for dy in (-1, 1):
-        r = rrect(cx - 9, TUBE_Y + dy * 66 - 9, cx + 9, TUBE_Y + dy * 66 + 9)
-        setfill(r, GRN_F)
-        setline(r, GRN_E, 1.4)
+# small caverns: one section ellipse per segment, at their real size class
+CAV = [(9, 19, "30"), (13, 28, "40"), (17, 37, "50"), (13, 28, "40")]
+for i, (rx, ry, lab) in enumerate(CAV):
+    e = roval(SEGC[i], TUBE_Y, rx, ry)
+    setfill(e, (255, 255, 255))
+    setline(e, TUN, 1.6)
+    text(SEGC[i] + rx + 22, TUBE_Y, lab, 12, TUN, boxw=40, boxh=22)
 
 for i in range(4):
     text(SEGC[i], 250, NUM[i], 30, SEG_EDGE[i], boxw=140, boxh=52)
@@ -232,8 +233,8 @@ for xd in BOUND[1:4]:
     setline(rline(xd, T, xd + DX, T - DY), BLACK, 0.9, dash=True)
 
 # box annotations
-text(890, 556, "小洞室 30~50 mm", 15, BLACK, boxw=280, boxh=36, bg=(255, 255, 255))
-leader(890, 538, 955, 480)
+text(878, 556, "小洞室 30 / 40 / 50 mm", 15, BLACK, boxw=320, boxh=36, bg=(255, 255, 255))
+leader(878, 538, 958, 442)
 text(1188, 288, "裂缝带", 15, BLACK, boxw=150, boxh=34, bg=(248, 248, 248))
 leader(1152, 294, 1112, 310)
 text(1188, 352, "循环内压 P", 15, BLACK, boxw=180, boxh=34, bg=(248, 248, 248))
