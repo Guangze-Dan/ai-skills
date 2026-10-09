@@ -219,7 +219,7 @@ for cx in (505, 1191):
     e = roval(cx, TUBE_Y, 18, 52)
     setfill(e, (196, 224, 244))
     setline(e, TUN, 1.6)
-text(700, 515, "Φ400 (P)", 16, TUN, boxw=190, boxh=34, bg=(255, 255, 255))
+text(700, 515, "Φ400 (P)", 16, TUN, boxw=190, boxh=34)
 leader(700, 498, 700, 478)
 
 # one identical dashed cross-section ellipse per segment (four in total)
@@ -237,9 +237,9 @@ for xd in BOUND[1:4]:
     setline(rline(xd, T, xd + DX, T - DY), BLACK, 0.9, dash=True)
 
 # box annotations
-text(1188, 288, "裂缝带", 15, BLACK, boxw=150, boxh=34, bg=(248, 248, 248))
+text(1188, 288, "裂缝带", 15, BLACK, boxw=150, boxh=34)
 leader(1152, 294, 1112, 310)
-text(1188, 352, "循环内压 P", 15, BLACK, boxw=180, boxh=34, bg=(248, 248, 248))
+text(1188, 352, "循环内压 P", 15, BLACK, boxw=170, boxh=34)
 leader(1188, 372, 1191, 400)
 
 # ============================ titles ============================
