@@ -1,12 +1,25 @@
 # -*- coding: utf-8 -*-
 """Extract red crack polylines from the source figure and dump them as JSON."""
 import json
+import os
 import numpy as np
 from PIL import Image, ImageDraw
 
 SRC = r"C:\Users\32204\.zcode\cli\image-cache\sess_9bc10f54-6a4b-4ab2-b20e-0772c627edee\image-4994f8eea1e453ae51416d6f1e4043ba.png"
-OUT = r"D:\Zcode\.zcode\workspace\default\redpaths.json"
-PREVIEW = r"D:\Zcode\.zcode\workspace\default\vimg\redpaths.png"
+WORKSPACE = r"D:\Zcode\.zcode\workspace\default"
+
+
+def safe_out(path):
+    """Normalise an output path and refuse anything outside the workspace."""
+    p = os.path.normpath(os.path.abspath(path))
+    base = os.path.normpath(os.path.abspath(WORKSPACE))
+    if os.path.commonpath([p, base]) != base:
+        raise ValueError("output path escapes workspace: %s" % p)
+    return p
+
+
+OUT = safe_out(r"redpaths.json")
+PREVIEW = safe_out(r"vimg\redpaths.png")
 
 im = np.asarray(Image.open(SRC).convert("RGB")).astype(int)
 R, G, B = im[:, :, 0], im[:, :, 1], im[:, :, 2]
