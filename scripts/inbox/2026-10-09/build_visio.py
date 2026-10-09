@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
 """Reproduce the tunnel 3D-model schematic figure in Visio (COM automation)."""
+import json
 import win32com.client as w
 
 PX = 100.0          # image pixels per inch
 IMG_H = 683.0       # source image height in px
+
+# red crack polylines extracted from the source figure (see extract_red.py)
+REDPATHS = json.load(open(r"D:\Zcode\.zcode\workspace\default\redpaths.json", encoding="utf-8"))
 
 
 def W(px):
@@ -125,6 +129,11 @@ def arrow(x1, y1, x2, y2, color=PURPLE, wt=2.5):
     return ln
 
 
+def draw_red(name, wt=1.5):
+    for path in REDPATHS[name]:
+        polyline([(p[0], p[1]) for p in path], RED, wt)
+
+
 # ============================ PANELS ============================
 GREEN_BG = (235, 241, 223)
 BLUE_BG = (219, 238, 243)
@@ -135,10 +144,7 @@ M75 = (75, 172, 198)
 p = rrect(2, 58, 402, 312)
 setfill(p, GREEN_BG)
 setline(p, BLACK, 1.4)
-polyline([(3, 150), (28, 157), (50, 156), (72, 168), (92, 180), (112, 188)], RED, 1.5)
-polyline([(75, 225), (95, 238), (115, 250), (140, 252), (165, 244), (192, 228)], RED, 1.5)
-polyline([(252, 206), (262, 196), (268, 178), (264, 160), (252, 150)], RED, 1.5)
-polyline([(252, 206), (280, 205), (310, 200), (345, 196), (375, 199), (400, 208)], RED, 1.5)
+draw_red("p3", 1.5)
 c = roval(206, 180, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -152,8 +158,7 @@ text(202, 30, "Cross-section 3", 19, BLACK, boxw=380, boxh=44)
 p = rrect(2, 355, 402, 608)
 setfill(p, GREEN_BG)
 setline(p, BLACK, 1.4)
-polyline([(75, 455), (100, 468), (125, 482), (150, 496), (160, 500)], RED, 1.5)
-polyline([(252, 498), (285, 505), (315, 515), (345, 528), (362, 538)], RED, 1.5)
+draw_red("p4", 1.5)
 c = roval(206, 477, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -167,9 +172,7 @@ text(202, 640, "Cross-section 4", 19, BLACK, boxw=380, boxh=44)
 p = rrect(1319, 58, 1720, 318)
 setfill(p, BLUE_BG)
 setline(p, BLACK, 1.4)
-polyline([(1322, 100), (1345, 118), (1365, 132), (1390, 140), (1420, 150), (1455, 165), (1476, 172)], RED, 1.5)
-polyline([(1352, 120), (1375, 128), (1400, 140), (1430, 152), (1460, 168), (1476, 178)], RED, 1.5)
-polyline([(1570, 168), (1600, 175), (1630, 180), (1660, 182), (1690, 180), (1718, 185)], RED, 1.5)
+draw_red("p1", 1.5)
 c = roval(1523, 186, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -183,9 +186,7 @@ text(1519, 30, "Cross-section 1", 19, BLACK, boxw=380, boxh=44)
 p = rrect(1319, 356, 1720, 608)
 setfill(p, BLUE_BG)
 setline(p, BLACK, 1.4)
-polyline([(1322, 392), (1350, 400), (1380, 415), (1410, 430), (1440, 445), (1470, 455)], RED, 1.5)
-polyline([(1372, 428), (1400, 442), (1430, 455), (1458, 462)], RED, 1.5)
-polyline([(1570, 478), (1610, 480), (1660, 476), (1718, 480)], RED, 1.5)
+draw_red("p2", 1.5)
 c = roval(1522, 477, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -235,26 +236,21 @@ for yy in (363, 440):
 ln = rline(561, 475, 1035, 475)
 setline(ln, BLACK, 1.5, dash=True)
 
-# crack (red wavy)
-CRACK = [(553, 406), (566, 400), (578, 410), (590, 404), (602, 396), (614, 402),
-         (626, 412), (638, 416), (650, 408), (662, 400), (674, 403), (686, 414),
-         (698, 409), (710, 400), (722, 403), (734, 412), (746, 416), (758, 407),
-         (770, 399), (782, 404), (794, 413), (806, 409), (818, 400), (830, 404),
-         (842, 413), (854, 407), (866, 399), (878, 404), (890, 412), (902, 406),
-         (914, 399), (926, 404), (938, 411), (950, 405), (962, 400), (975, 405)]
-polyline(CRACK, RED, 1.3)
+# borehole / bolt ellipses (drawn first, crack goes on top as in the original)
+# (cx, fill, outline, weight, dashed)
+ELL = [(505, (255, 255, 255), BLACK, 1.6, True),
+       (627, (235, 235, 235), (150, 150, 150), 1.0, True),
+       (742, (235, 235, 235), (150, 150, 150), 1.0, True),
+       (858, (235, 235, 235), (150, 150, 150), 1.0, True),
+       (974, (235, 235, 235), (150, 150, 150), 1.0, True),
+       (1191, (255, 255, 255), BLACK, 1.6, False)]
+for cx, fc, oc, wt, dash in ELL:
+    e = roval(cx, 408, 24, 54)
+    setfill(e, fc)
+    setline(e, oc, wt, dash=dash)
 
-# borehole / bolt ellipses
-ELL = [(498, "dash", 1.4), (600, "solid", 1.0), (700, "dash", 1.4),
-       (803, "solid", 1.0), (897, "dash", 1.4), (1073, "solid", 1.0),
-       (1197, "solid", 1.5)]
-for cx, style, wt in ELL:
-    e = roval(cx, 408, 21, 52)
-    setfill(e, (255, 255, 255))
-    if style == "dash":
-        setline(e, BLACK, wt, dash=True)
-    else:
-        setline(e, (120, 120, 120) if wt < 1.4 else BLACK, wt)
+# red crack (extracted from the original figure)
+draw_red("box", 1.3)
 
 # ============================ DIMENSIONS ============================
 DIMY = 645
@@ -285,7 +281,7 @@ ln.Cells("BeginArrow").Formula = "13"
 ln.Cells("EndArrow").Formula = "13"
 text(1252, 578, "1600", 15, BLACK, boxw=90, boxh=36, angle=45)
 
-text(1042, 578, "Unit: mm", 15, BLACK, boxw=200, boxh=40)
+text(1048, 578, "Unit: mm", 16, BLACK, boxw=200, boxh=40)
 
 # ============================ PURPLE ARROWS ============================
 arrow(724, 393, 420, 215)
