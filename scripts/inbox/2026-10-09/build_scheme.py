@@ -170,11 +170,16 @@ def dot(cx, cy, r, fill, edge=None):
     return e
 
 
-def blk(cx, cy, s, label):
+SZ = {"30": 26.0, "40": 33.0, "50": 40.0}   # block size classes (30/40/50 mm)
+
+
+def blk(cx, cy, lab):
+    """Square silicone-rubber defect block, drawn at its real size class."""
+    s = SZ[lab]
     r = rrect(cx - s / 2.0, cy - s / 2.0, cx + s / 2.0, cy + s / 2.0)
     setfill(r, GRN_F)
     setline(r, GRN_E, 2.0)
-    text(cx, cy, label, 12, (26, 84, 40), boxw=s + 6, boxh=s * 0.8)
+    text(cx, cy, lab, 10.5 + (s - 26) * 0.2, (26, 84, 40), boxw=s + 6, boxh=s * 0.8)
 
 
 # ============================ palette ============================
@@ -214,15 +219,14 @@ for cx in (505, 1191):
     e = roval(cx, TUBE_Y, 18, 52)
     setfill(e, (196, 224, 244))
     setline(e, TUN, 1.6)
-text(690, TUBE_Y, "Φ400 (P)", 16, TUN, boxw=180, boxh=34)
+text(700, 515, "Φ400 (P)", 16, TUN, boxw=190, boxh=34, bg=(255, 255, 255))
+leader(700, 498, 700, 478)
 
-# small caverns: one section ellipse per segment, at their real size class
-CAV = [(9, 19, "30"), (13, 28, "40"), (17, 37, "50"), (13, 28, "40")]
-for i, (rx, ry, lab) in enumerate(CAV):
-    e = roval(SEGC[i], TUBE_Y, rx, ry)
+# tunnel cross-sections: one identical dashed ellipse row along the cavern axis
+for cx in (545, 660, 775, 890, 1005, 1120):
+    e = roval(cx, TUBE_Y, 16, 52)
     setfill(e, (255, 255, 255))
-    setline(e, TUN, 1.6)
-    text(SEGC[i] + rx + 22, TUBE_Y, lab, 12, TUN, boxw=40, boxh=22)
+    setline(e, (62, 62, 62), 1.1, dash=True)
 
 for i in range(4):
     text(SEGC[i], 250, NUM[i], 30, SEG_EDGE[i], boxw=140, boxh=52)
@@ -233,8 +237,6 @@ for xd in BOUND[1:4]:
     setline(rline(xd, T, xd + DX, T - DY), BLACK, 0.9, dash=True)
 
 # box annotations
-text(878, 556, "小洞室 30 / 40 / 50 mm", 15, BLACK, boxw=320, boxh=36, bg=(255, 255, 255))
-leader(878, 538, 958, 442)
 text(1188, 288, "裂缝带", 15, BLACK, boxw=150, boxh=34, bg=(248, 248, 248))
 leader(1152, 294, 1112, 310)
 text(1188, 352, "循环内压 P", 15, BLACK, boxw=180, boxh=34, bg=(248, 248, 248))
@@ -324,9 +326,9 @@ def panel(x0, y0, x1, y1, idx, title, cx, cy, band_top, lab_x=None):
 
 # --- 剖面 I : 裂缝带起裂 -----------------------------------------------------
 panel(2, 58, 402, 312, 0, "剖面 I｜裂缝带起裂", 202, 232, 279)
-blk(202 - 76, 232 - 76, 30, "30")
-blk(202 - 102, 232, 30, "50")
-blk(202 + 102, 232, 30, "40")
+blk(202 - 76, 232 - 76, "30")
+blk(202 - 102, 232, "50")
+blk(202 + 102, 232, "40")
 text(306, 152, "板 80×2 mm", 14, RED, boxw=170, boxh=28)
 leader(306, 166, 218, 182)
 
@@ -343,9 +345,9 @@ for ang in (40, 140, 220, 320):
         b = math.radians(d)
         setline(rline(rx - 8 * math.cos(b), ry + 8 * math.sin(b),
                       rx + 8 * math.cos(b), ry - 8 * math.sin(b)), (240, 140, 30), 1.0)
-blk(202 - 102, 528, 30, "40")
-blk(202 + 102, 528, 30, "40")
-blk(202 + 76, 528 - 76, 30, "40")
+blk(202 - 102, 528, "40")
+blk(202 + 102, 528, "40")
+blk(202 + 76, 528 - 76, "40")
 text(330, 418, "FBG ×3", 13, (196, 118, 20), boxw=130, boxh=26)
 text(322, 470, "应变花", 14, (196, 118, 20), boxw=150, boxh=26)
 leader(292, 478, 246, 502)
@@ -365,18 +367,18 @@ dot(1490, 462, 9, (238, 96, 60), (176, 40, 24))
 e = roval(1490, 462, 17, 17)
 nofill(e)
 setline(e, (214, 96, 60), 1.2, dash=True)
-blk(1596, 462, 30, "30")
-blk(1418, 528, 30, "40")
-blk(1622, 528, 30, "50")
+blk(1596, 462, "30")
+blk(1418, 528, "40")
+blk(1622, 528, "50")
 text(1450, 562, "AE ×8", 14, (40, 96, 152), boxw=130, boxh=26)
 
 # --- 剖面 IV : 双缺陷块与岩桥 ------------------------------------------------
 panel(1319, 58, 1720, 318, 3, "剖面 IV｜双缺陷块与岩桥", 1520, 238, 285)
-blk(1520 - 100, 238, 30, "40")
-blk(1520 - 148, 238, 30, "40")
+blk(1520 - 100, 238, "40")
+blk(1520 - 148, 238, "40")
 text(1396, 180, "岩桥 40 mm", 14, GRN_E, boxw=190, boxh=28)
 leader(1396, 194, 1396, 220)
-blk(1520 + 100, 238, 30, "40")
+blk(1520 + 100, 238, "40")
 
 # ============================ leader arrows ============================
 arrow(560, 385, 420, 215)
