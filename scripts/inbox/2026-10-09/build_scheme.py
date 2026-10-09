@@ -200,12 +200,9 @@ for i in range(4):
     setfill(rb, SEG_TINT[i])
     noline(rb)
 
-# fracture-band zone (red dashed strip, as in the document's box figure)
-zb = rrect(L + 16, 288, R - 16, 352)
-setfill(zb, (253, 240, 240))
-setline(zb, RED, 1.0, dash=True)
+# one inclined fracture-plate pair per segment
 for i in range(4):
-    band(SEGC[i], 320, ang=32, ln=62, gap=26, wt=4.0)
+    band(SEGC[i], 308, ang=32, ln=62, gap=26, wt=4.0)
 
 # main cavern Φ400 (P): tube along the axis + end openings
 tb = rrect(505, TUBE_Y - 52, 1191, TUBE_Y + 52)
@@ -219,29 +216,26 @@ for cx in (505, 1191):
     setline(e, TUN, 1.6)
 text(592, TUBE_Y, "Φ400 (P)", 16, TUN, boxw=170, boxh=34)
 
-# multi-scale square silicone-rubber small caverns (30/40/50 mm) on both flanks
+# small caverns: same green squares as in the four sections, on both flanks
 for cx in (760, 958, 1072):
     for dy in (-1, 1):
-        e = roval(cx, TUBE_Y + dy * 30, 26, 26)
-        nofill(e)
-        setline(e, (72, 128, 186), 1.1, dash=True)
+        r = rrect(cx - 9, TUBE_Y + dy * 66 - 9, cx + 9, TUBE_Y + dy * 66 + 9)
+        setfill(r, GRN_F)
+        setline(r, GRN_E, 1.4)
 
 for i in range(4):
     text(SEGC[i], 250, NUM[i], 30, SEG_EDGE[i], boxw=140, boxh=52)
 
-# black grid / hidden depth lines on top so nothing crosses them
+# black grid lines on top so nothing crosses them
 for xd in BOUND[1:4]:
     setline(rline(xd, T, xd, B), BLACK, 0.9, dash=True)
     setline(rline(xd, T, xd + DX, T - DY), BLACK, 0.9, dash=True)
-for xd in (L, 648, 901, 1015):
-    setline(rline(xd, B, xd + DX, B - DY), BLACK, 0.9, dash=True)
-setline(rline(L, 493, R + DX, 493), BLACK, 1.5, dash=True)
 
 # box annotations
-text(880, 556, "小洞室 30~50 mm", 15, BLACK, boxw=280, boxh=36, bg=(255, 255, 255))
-leader(880, 538, 880, 470)
+text(890, 556, "小洞室 30~50 mm", 15, BLACK, boxw=280, boxh=36, bg=(255, 255, 255))
+leader(890, 538, 955, 480)
 text(1188, 288, "裂缝带", 15, BLACK, boxw=150, boxh=34, bg=(248, 248, 248))
-leader(1152, 292, 1112, 316)
+leader(1152, 294, 1112, 310)
 text(1188, 352, "循环内压 P", 15, BLACK, boxw=180, boxh=34, bg=(248, 248, 248))
 leader(1188, 372, 1191, 400)
 
