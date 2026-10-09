@@ -94,7 +94,7 @@ def trace(x0, x1, y0, y1, maxgap, ytol):
     paths = []
     for st in strands:
         if len(st["pts"]) >= 4:
-            sm = rdp(st["pts"], 1.6)
+            sm = rdp(st["pts"], 0.5)
             paths.append([[round(a, 1), round(b, 1)] for a, b in sm])
     return paths
 

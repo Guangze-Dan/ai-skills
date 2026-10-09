@@ -144,7 +144,7 @@ M75 = (75, 172, 198)
 p = rrect(2, 58, 402, 312)
 setfill(p, GREEN_BG)
 setline(p, BLACK, 1.4)
-draw_red("p3", 1.5)
+draw_red("p3", 1.0)
 c = roval(206, 180, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -158,7 +158,7 @@ text(202, 30, "Cross-section 3", 19, BLACK, boxw=380, boxh=44)
 p = rrect(2, 355, 402, 608)
 setfill(p, GREEN_BG)
 setline(p, BLACK, 1.4)
-draw_red("p4", 1.5)
+draw_red("p4", 1.0)
 c = roval(206, 477, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -172,7 +172,7 @@ text(202, 640, "Cross-section 4", 19, BLACK, boxw=380, boxh=44)
 p = rrect(1319, 58, 1720, 318)
 setfill(p, BLUE_BG)
 setline(p, BLACK, 1.4)
-draw_red("p1", 1.5)
+draw_red("p1", 1.0)
 c = roval(1523, 186, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -186,7 +186,7 @@ text(1519, 30, "Cross-section 1", 19, BLACK, boxw=380, boxh=44)
 p = rrect(1319, 356, 1720, 608)
 setfill(p, BLUE_BG)
 setline(p, BLACK, 1.4)
-draw_red("p2", 1.5)
+draw_red("p2", 1.0)
 c = roval(1522, 477, 47, 47)
 setfill(c, (255, 255, 255))
 setline(c, BLACK, 1.4)
@@ -229,28 +229,28 @@ for xd in DIVS:
 for xd in [442, 561, 678, 796, 914]:
     ln = rline(xd, B, xd + DX, B - DY)
     setline(ln, BLACK, 0.9, dash=True)
-# horizontal reference dashed lines
-for yy in (363, 440):
+# horizontal reference dashed lines (four, full width, as in the original)
+for yy in (368, 420, 471):
     ln = rline(L, yy, R + DX, yy)
     setline(ln, BLACK, 0.9, dash=True)
-ln = rline(561, 475, 1035, 475)
+ln = rline(L, 493, R + DX, 493)
 setline(ln, BLACK, 1.5, dash=True)
 
 # borehole / bolt ellipses (drawn first, crack goes on top as in the original)
-# (cx, fill, outline, weight, dashed)
-ELL = [(505, (255, 255, 255), BLACK, 1.6, True),
-       (627, (235, 235, 235), (150, 150, 150), 1.0, True),
-       (742, (235, 235, 235), (150, 150, 150), 1.0, True),
-       (858, (235, 235, 235), (150, 150, 150), 1.0, True),
-       (974, (235, 235, 235), (150, 150, 150), 1.0, True),
-       (1191, (255, 255, 255), BLACK, 1.6, False)]
-for cx, fc, oc, wt, dash in ELL:
-    e = roval(cx, 408, 24, 54)
+# (cx, rx, fill, outline, weight, dashed)  -- slender ovals, centre y=421
+ELL = [(505, 18, (255, 255, 255), BLACK, 1.4, True),
+       (627, 15, (235, 235, 235), (60, 60, 60), 1.0, True),
+       (742, 15, (235, 235, 235), (60, 60, 60), 1.0, True),
+       (858, 15, (235, 235, 235), (60, 60, 60), 1.0, True),
+       (974, 15, (235, 235, 235), (60, 60, 60), 1.0, True),
+       (1191, 15, (255, 255, 255), BLACK, 1.4, False)]
+for cx, rx, fc, oc, wt, dash in ELL:
+    e = roval(cx, 423, rx, 52)
     setfill(e, fc)
     setline(e, oc, wt, dash=dash)
 
 # red crack (extracted from the original figure)
-draw_red("box", 1.3)
+draw_red("box", 1.0)
 
 # ============================ DIMENSIONS ============================
 DIMY = 645
