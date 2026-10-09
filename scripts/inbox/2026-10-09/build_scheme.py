@@ -222,9 +222,9 @@ for cx in (505, 1191):
 text(700, 515, "Φ400 (P)", 16, TUN, boxw=190, boxh=34, bg=(255, 255, 255))
 leader(700, 498, 700, 478)
 
-# tunnel cross-sections: one identical dashed ellipse row along the cavern axis
-for cx in (545, 660, 775, 890, 1005, 1120):
-    e = roval(cx, TUBE_Y, 16, 52)
+# one identical dashed cross-section ellipse per segment (four in total)
+for i in range(4):
+    e = roval(SEGC[i], TUBE_Y, 16, 52)
     setfill(e, (255, 255, 255))
     setline(e, (62, 62, 62), 1.1, dash=True)
 
