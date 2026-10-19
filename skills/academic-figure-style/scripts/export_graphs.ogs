@@ -1,0 +1,39 @@
+// ============================================================================
+//  export_graphs.ogs —— 在 Origin 的 Script Window 里粘贴执行，导出当前图窗
+// ----------------------------------------------------------------------------
+//  为什么导出要放在 Origin 里手动做：
+//    经由自动化接口（originpro / OriginExt / COM）触发的导出会被加上 "demo" 水印。
+//    由你在 Origin 窗口内执行的导出不受影响。详见 references/automation-stack.md。
+//
+//  更省事的等价做法：直接用菜单  File -> Export -> Graphs...（导出图形），
+//    在里面选好尺寸即可，效果与下面两行一致。
+//
+//  用法：
+//    1. 用 scripts/build_origin_figure.py 生成 OPJU，在 Origin 里打开
+//    2. Window -> Script Window
+//    3. 按需修改下面三个变量，整段粘贴，回车
+// ============================================================================
+
+// ---- 按需修改 ----
+string outpath$ = "D:\Zcode\.zcode\workspace\default\origin_out";   // 注意：结尾不要带反斜杠
+string nm$ = "Graph1";        // 要导出的图窗名（Origin 左侧 Project Explorer 里可见）
+int bmpwidth = 2100;          // 位图宽度（像素）；600 对应规范里的 600x600
+// ------------------
+
+// 位图 PNG
+expGraph type:=png export:=page overwrite:=replace filename:=nm$ path:=outpath$ tr1.Unit:=1 tr1.Width:=bmpwidth;
+
+// 矢量 PDF，字体嵌入（投稿首选）
+expGraph type:=pdf export:=page overwrite:=replace filename:=nm$ path:=outpath$ tr2.PDF.Fonts.Embed:=1;
+
+type "exported: $(nm$) -> $(outpath$)";
+
+// ---------------------------------------------------------------------------
+//  两张坑，都实测踩过：
+//  1) path 结尾**不能**带反斜杠 —— Origin 的 expGraph 处理带尾反斜杠的路径会失败
+//     （originpro 自己的源码里也有注释抱怨这一点）。
+//  2) LabTalk 逐行执行，每条语句必须写在一整行内，不要换行断开。
+//
+//  批量导出：可以对多个图窗重复上面两行（改 nm$）。想用 `doc -e G { ... }` 循环一次导完
+//  也可以，但该写法在本机**未经完整验证**，第一次用请先拿一张图试。
+// ---------------------------------------------------------------------------

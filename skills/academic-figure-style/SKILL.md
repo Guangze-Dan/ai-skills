@@ -31,14 +31,19 @@ description: >-
 2. **只用黑白灰 + 一个强调色**。示意/曲线一律黑色；需要突出对比时用红色一类亮色，
    绝不使用 Origin/Visio 默认的多彩配色。
 
-## ⚠️ 前置条件：自动化导出的图带 "demo" 水印（已定位到导出环节）
+## ⚠️ 前置条件：自动化导出的图带 "demo" 水印（已定位，走两段式规避）
 
 用 `originpro` 脚本导出 Origin 图，PNG 会被平铺的青色 "demo" 水印覆盖，**不能用于投稿**。
 **关键事实**：同一张图**显示在 Origin 窗口里是干净的**，水印是"导出"这一动作经由自动化接口时加上的。
 已排除授权、导出 API、窗口可见性、数据来源、导出参数、实例来源六种假设。
-**在结论明确前**：Origin 路线产出的图必须逐张肉眼确认无水印；推荐折中做法 ——
-**自动化只建图并存 OPJU，最终导出由用户在 GUI 里完成**；或改走 matplotlib/SVG 出图。
-完整证据链与应对见 [automation-stack.md](references/automation-stack.md)。
+
+**因此 Origin 出图一律走两段式**（脚本见 `scripts/`）：
+
+1. **脚本建图 + 存 OPJU** —— `scripts/build_origin_figure.py`，不导出图片；
+2. **在 Origin 里导出** —— 菜单 `File → Export → Graphs...`，或跑 `scripts/export_graphs.ogs`。
+
+完整证据链与其它应对见 [automation-stack.md](references/automation-stack.md)。
+Visio 那条线（COM）不受影响。
 
 ## 交付形态
 
@@ -60,4 +65,5 @@ description: >-
 - 数据图（Origin）：[references/origin-format.md](references/origin-format.md)
 - 示意图（Visio）：[references/visio-format.md](references/visio-format.md)
 - **自动化工具链与依赖**：[references/automation-stack.md](references/automation-stack.md) —— 要真自动出图（而不是只给清单）时读它
+- **可执行脚本**：[scripts/README.md](scripts/README.md) —— 两段式出图流程（建图存 OPJU / 在 Origin 里导出）
 - 原始规范截图（用户 docx 内的实例）：`assets/origin-*.png`、`assets/visio-*.png`
