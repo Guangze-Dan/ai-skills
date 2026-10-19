@@ -9,17 +9,27 @@ SRC = r"C:\Users\32204\.zcode\cli\image-cache\sess_9bc10f54-6a4b-4ab2-b20e-0772c
 WORKSPACE = r"D:\Zcode\.zcode\workspace\default"
 
 
-def safe_out(path):
-    """Normalise an output path and refuse anything outside the workspace."""
-    p = os.path.normpath(os.path.abspath(path))
-    base = os.path.normpath(os.path.abspath(WORKSPACE))
-    if os.path.commonpath([p, base]) != base:
-        raise ValueError("output path escapes workspace: %s" % p)
+OUT_NAME = "redpaths.json"
+PREVIEW_NAME = os.path.join("vimg", "redpaths.png")
+
+
+def workspace_path(name):
+    """Resolve `name` relative to WORKSPACE and refuse anything outside it.
+
+    The name must be relative; absolute names and `..` segments that walk out of
+    WORKSPACE are rejected. Returns the real (symlink-resolved) absolute path.
+    """
+    if os.path.isabs(name):
+        raise ValueError("expected a relative name, got: %s" % name)
+    base = os.path.realpath(WORKSPACE)
+    p = os.path.realpath(os.path.join(base, name))
+    if os.path.commonpath([base, p]) != base:
+        raise ValueError("path escapes workspace: %s" % p)
     return p
 
 
-OUT = safe_out(r"redpaths.json")
-PREVIEW = safe_out(r"vimg\redpaths.png")
+OUT = workspace_path(OUT_NAME)
+PREVIEW = workspace_path(PREVIEW_NAME)
 
 im = np.asarray(Image.open(SRC).convert("RGB")).astype(int)
 R, G, B = im[:, :, 0], im[:, :, 1], im[:, :, 2]
