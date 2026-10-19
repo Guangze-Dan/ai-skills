@@ -1,8 +1,13 @@
 {
-    "updated":  "2026-10-08",
+    "updated":  "2026-10-19",
     "source":  "https://github.com/Guangze-Dan/ai-skills",
-    "count":  58,
+    "count":  59,
     "skills":  [
+                   {
+                       "name":  "academic-figure-style",
+                       "dir":  "skills/academic-figure-style",
+                       "description":  "用户自己的论文出图house style（Origin 数据图 + Visio 示意图）。当用户说「学术绘图风格」「按我的出图规范」 「论文出图格式」「出图」「照之前那样画」或提交图表/数据要求按期刊风格绘制时使用。覆盖 Origin 点线图的 尺寸/轴线/字体/刻度/布局/线条/导出，以及 Visio 示意图的 CAD→dxf→Visio 流程、图幅、线宽线型层级、文字与 公式字号、600×600 jpg 导出。不用于统计建模、数据清洗或交互式看板。"
+                   },
                    {
                        "name":  "academic-paper",
                        "dir":  "skills/academic-paper",
