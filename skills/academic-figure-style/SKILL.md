@@ -31,19 +31,17 @@ description: >-
 2. **只用黑白灰 + 一个强调色**。示意/曲线一律黑色；需要突出对比时用红色一类亮色，
    绝不使用 Origin/Visio 默认的多彩配色。
 
-## ⚠️ 前置条件：自动化导出的图带 "demo" 水印（已定位，走两段式规避）
+## ⛔ 前置条件：这台 Origin 的**任何导出**都带 "demo" 水印
 
-用 `originpro` 脚本导出 Origin 图，PNG 会被平铺的青色 "demo" 水印覆盖，**不能用于投稿**。
-**关键事实**：同一张图**显示在 Origin 窗口里是干净的**，水印是"导出"这一动作经由自动化接口时加上的。
-已排除授权、导出 API、窗口可见性、数据来源、导出参数、实例来源六种假设。
+从这台机器上的 Origin 导出的图，**一律**带平铺的青色 "demo" 水印，**不能用于投稿**。
+已实测到无可辩驳：用 Origin **自己的 GUI** 新建一张空图（`File → New → Graph`，默认模板、无数据、
+不涉及任何脚本），再用 **GUI 菜单**导出，照样满屏水印。屏幕上的图是干净的，只有导出会被加水印。
 
-**因此 Origin 出图一律走两段式**（脚本见 `scripts/`）：
+**这不是本 skill 脚本的问题，也不是"自动化"的问题，任何脚本都绕不过去。**
+早先设想的"自动化建图 + GUI 导出"两段式方案**已作废** —— GUI 导出同样带水印。
+唯一出路是让 Origin 恢复授权，或改用别的工具链（matplotlib/SVG）出图。
 
-1. **脚本建图 + 存 OPJU** —— `scripts/build_origin_figure.py`，不导出图片；
-2. **在 Origin 里导出** —— 菜单 `File → Export → Graphs...`，或跑 `scripts/export_graphs.ogs`。
-
-完整证据链与其它应对见 [automation-stack.md](references/automation-stack.md)。
-Visio 那条线（COM）不受影响。
+完整证据链见 [automation-stack.md](references/automation-stack.md)。Visio 那条线（COM）不受影响。
 
 ## 交付形态
 
