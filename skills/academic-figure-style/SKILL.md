@@ -24,12 +24,28 @@ description: >-
 
 判定不了就问一句：**「这张是数据图（Origin）还是示意图（Visio）？」** 不要猜。
 
-## 硬约束（两条通用铁律）
+## 硬约束（四条通用铁律）
 
-1. **中文字体宋体，西文/数字 Times New Roman（罗马字体），变量斜体**。任何一张图都不得出现其它字体族。
-   变量（如 σ、t、T、R）必须斜体，单位（MPa、d、mm）保持正体。
-2. **只用黑白灰 + 一个强调色**。示意/曲线一律黑色；需要突出对比时用红色一类亮色，
+1. **中文字体宋体，西文/数字 Times New Roman（罗马字体）**。任何一张图都不得出现其它字体族 ——
+   逐张确认，不要相信默认设置。
+2. **物理量斜体、单位正体**：变量与希腊字母（*σ*、*ε*、*η*、*t*）斜体；单位（MPa、℃、%）、
+   数字、函数名、说明性下标（*p*<sub>max</sub>）正体。完整对照表见
+   [references/typography-rules.md](references/typography-rules.md)。
+3. **坐标轴标题的量与单位用斜杠 `/` 分隔，不用括号**（`贮室温升 / ℃`，不是 `贮室温升（℃）`），
+   **全文统一**；坐标轴文字在最终印刷尺寸下必须清晰可读。
+4. **只用黑白灰 + 一个强调色**。示意/曲线一律黑色；需要突出对比时用红色一类亮色，
    绝不使用 Origin/Visio 默认的多彩配色。
+
+## 图的规矩（容易被忽略，逐条对照）
+
+- **图中不放"注：…"** —— 测点位置、参数口径、定义这类解释性内容**全部移到正文**；
+  物理量首次出现时在正文里解释一次即可。
+- **同一物理量全文只能有一种写法**，尤其上下标：若规范上用 Δ*T*<sub>eff</sub>（带下标），
+  全文所有图、公式、正文都必须带下标，不能一处有一处没有。
+- **MathType 公式的字号要与正文一致**（在 `大小 → 定义尺寸` 里设），不能沿用旧模板的默认值。
+- **修改过的公式要标红**，与其它修改一致，便于审稿人比对。
+- **图与图题之间不留大空白**（通常是图片自带白边或段落间距不一致造成）。
+- 交付前过一遍 [references/typography-rules.md](references/typography-rules.md) 末尾的自检清单。
 
 ## ⛔ 前置条件：这台 Origin 的**任何导出**都带 "demo" 水印
 
@@ -61,6 +77,7 @@ description: >-
 ## 参考
 
 - **安装与环境要求（分享给他人时先看这个）**：[INSTALL.md](INSTALL.md)
+- **正斜体与排版细则（硬约束，优先于下面两份）**：[references/typography-rules.md](references/typography-rules.md)
 - 数据图（Origin）：[references/origin-format.md](references/origin-format.md)
 - 示意图（Visio）：[references/visio-format.md](references/visio-format.md)
 - **自动化工具链与依赖**：[references/automation-stack.md](references/automation-stack.md) —— 要真自动出图（而不是只给清单）时读它
