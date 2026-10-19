@@ -1,0 +1,15 @@
+# 依赖清单（实测通过的版本）
+# 安装：python -m pip install -r requirements.txt
+# 说明见 ../INSTALL.md
+
+# —— 必需 ——
+pywin32==312        # COM 桥，驱动 Visio
+originpro==1.1.15   # Origin 官方 Python 封装
+ezdxf==1.4.5        # 代码生成 dxf，替代 CAD
+Pillow==12.3.0      # 导出校验、位图后处理
+numpy==2.4.6        # 几何/数据计算
+
+# OriginExt 是 originpro 的依赖，pip 会自动装上，不需要显式列。
+
+# —— 可选 ——
+# matplotlib==3.11.1   # 纯 data 图走 matplotlib 兜底路线（绕开 Origin）时才需要

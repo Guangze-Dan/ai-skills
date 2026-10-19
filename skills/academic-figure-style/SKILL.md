@@ -60,8 +60,9 @@ description: >-
 
 ## 参考
 
+- **安装与环境要求（分享给他人时先看这个）**：[INSTALL.md](INSTALL.md)
 - 数据图（Origin）：[references/origin-format.md](references/origin-format.md)
 - 示意图（Visio）：[references/visio-format.md](references/visio-format.md)
 - **自动化工具链与依赖**：[references/automation-stack.md](references/automation-stack.md) —— 要真自动出图（而不是只给清单）时读它
-- **可执行脚本**：[scripts/README.md](scripts/README.md) —— 两段式出图流程（建图存 OPJU / 在 Origin 里导出）
+- **可执行脚本**：[scripts/README.md](scripts/README.md) —— 建图脚本、导出脚本、环境自检
 - 原始规范截图（用户 docx 内的实例）：`assets/origin-*.png`、`assets/visio-*.png`

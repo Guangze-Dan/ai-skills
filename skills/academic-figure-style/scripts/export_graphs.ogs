@@ -14,8 +14,8 @@
 //    3. 按需修改下面三个变量，整段粘贴，回车
 // ============================================================================
 
-// ---- 按需修改 ----
-string outpath$ = "D:\Zcode\.zcode\workspace\default\origin_out";   // 注意：结尾不要带反斜杠
+// ---- 按需修改（改成你自己的输出目录）----
+string outpath$ = "C:\Users\你的用户名\Desktop\origin_out";   // 注意：结尾不要带反斜杠
 string nm$ = "Graph1";        // 要导出的图窗名（Origin 左侧 Project Explorer 里可见）
 int bmpwidth = 2100;          // 位图宽度（像素）；600 对应规范里的 600x600
 // ------------------
