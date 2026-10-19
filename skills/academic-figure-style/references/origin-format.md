@@ -5,7 +5,8 @@
 对应截图：`assets/origin-01-page-size.png` … `assets/origin-07-export.png`。
 
 > ⚠️ **本机 Origin 2025b 的两点注意**
-> 1. 当前 Origin 未激活，导出带 "demo" 水印，不能投稿（见 [automation-stack.md](automation-stack.md)）。
+> 1. **脚本导出的图带 "demo" 水印，原因未定**（已排除授权与导出 API 两个方向，
+>    详见 [automation-stack.md](automation-stack.md)）。交付前必须逐张肉眼确认无水印。
 > 2. Origin 2025b 改了**图页比例、边距、字体呈现、轴框、线宽、刻度标签自动旋转**的默认值。
 >    本规范原文可能出自更早版本，在 2025b 上要重新核对视觉结果。
 >

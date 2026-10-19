@@ -31,11 +31,16 @@ description: >-
 2. **只用黑白灰 + 一个强调色**。示意/曲线一律黑色；需要突出对比时用红色一类亮色，
    绝不使用 Origin/Visio 默认的多彩配色。
 
-## ⚠️ 前置条件：Origin 当前未激活
+## ⚠️ 前置条件：自动化导出的图带 "demo" 水印（原因未定）
 
-本机 Origin 2025b 处于演示模式，**导出的图带平铺 "demo" 水印**，不能用于投稿。
-在用户激活 Origin 之前，Origin 路线只能产出草稿；要交付正式插图，要么先激活，要么改走
-matplotlib/SVG 出图。每次走 Origin 前先检查这一点，别默认它能出干净图。
+用 `originpro` 脚本导出的 Origin 图会被平铺的青色 "demo" 水印覆盖，**不能用于投稿**。
+**已排除的原因**：不是授权问题（安装为 OriginPro 2025b、`[Registration] UserType=PR`、
+窗口标题无 Demo 标记、无激活提示），也不是导出 API 问题（`save_fig` 内部就是 `expgraph -sw`，
+与 GUI 的"导出图形"是同一个 X-Function）。
+**尚未排除**：图形由脚本创建（`new_sheet` + `plotxy`）、自动化会话被 `set_show(False)` 隐藏这两点。
+细节与待跑的实验见 [automation-stack.md](references/automation-stack.md)。
+**在结论明确前**：Origin 路线产出的图必须逐张肉眼确认无水印；要交付正式插图，
+要么先解决这个水印，要么改走 matplotlib/SVG 出图。
 
 ## 交付形态
 

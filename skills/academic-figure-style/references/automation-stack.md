@@ -15,11 +15,40 @@
 
 本机软件：Origin 2025b（10.25）、Visio LTSC 专业版 2024（16.0.17932）、**无任何 CAD**。
 
-## ⚠️ 头号阻塞：Origin 未激活，导出带 "demo" 水印
+## ⚠️ 头号待查：自动化导出的图带 "demo" 水印（原因未定）
 
-实测导出图被平铺的青色 **"demo"** 文字覆盖，说明 Origin 2025b 处于演示/未激活状态
-（`C:\ProgramData\OriginLab\License\` 为空目录）。**这必须由用户激活 Origin 才能解决，任何脚本都绕不过去。**
-在水印消失之前，自动化产出的图不能用于投稿。
+用 `originpro` 脚本导出时，图会被平铺的青色 **"demo"** 文字覆盖（实测青色像素约占画面 2.16%），
+**不能用于投稿**。证据图样本：`D:\Zcode\.zcode\workspace\default\origin_watermark_check.png`。
+
+**已经排除的两条**（都实测过，不要再往这两个方向查）：
+
+1. **不是授权问题。** 早先"Origin 未激活"的说法是**错的**，已推翻。实际证据：
+   - 安装是 **OriginPro** 2025b（10.25.212），窗口标题为 `OriginPro 2025b - UNTITLED`，无 Demo 标记；
+   - `Origin.ini` 与 `InstallInfo.ini` 里都是 `[Registration] UserType=PR`；
+   - 用户明确表示自己的 Origin 从不提示激活，且**手工导出一直正常**；
+   - `C:\ProgramData\OriginLab\osn.dat` 就是旧版 `olicense.lic` 改名来的授权容器，**它存在**
+     （`System/oc_sys.h` 里有官方注释说明），之前误判是因为只看到 `License\` 目录为空。
+2. **不是导出 API 的问题。** 已读 `originpro/graph.py` 源码：`save_fig()` 内部拼的就是
+   `expgraph -sw type:=... filename:=... path:=...`，**与 GUI 菜单里的"导出图形"是同一个 X-Function**。
+   所以"用 save_fig 才带水印、用 GUI 导出就干净"这种解释不成立。
+
+**尚未排除、需要继续验证的两条**：
+
+1. 图形是**由脚本创建**的（`op.new_sheet` + `from_list` + `plotxy iy:=(1,2) plot:=200;`），
+   而用户手工画图走的是另一条路径。
+2. 自动化会话把 Origin **隐藏**了 —— 所有带水印的导出都发生在 `op.set_show(False)`（即 LabTalk `@VIS=0`）之后。
+
+**待跑的对照实验**（各导出一次、比较青色像素占比）：
+- A：隐藏模式 + `save_fig`（已知带水印，作基线）
+- B：**可见模式** + `save_fig` ← 关键变量
+- C：可见模式下手工建图，再由脚本导出
+
+最快的判别办法其实是让用户**自己手工导出一张图**：若手工导出干净、脚本导出带水印，
+则原因锁定在自动化会话上；若手工导出也带水印，则回到安装状态。
+
+**注意**：Origin 是 GUI 程序，**Windows 会话锁屏时无法创建窗口，自动化会直接挂住**
+（`op.lt_exec("type -a $(@V)")` 之后卡死）。跑这类实验前先确认会话处于解锁状态，
+并用 `taskkill /F /IM Origin64.exe` 清理残留进程。
 
 ## Origin：已验证的属性与写法
 
