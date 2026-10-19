@@ -31,16 +31,14 @@ description: >-
 2. **只用黑白灰 + 一个强调色**。示意/曲线一律黑色；需要突出对比时用红色一类亮色，
    绝不使用 Origin/Visio 默认的多彩配色。
 
-## ⚠️ 前置条件：自动化导出的图带 "demo" 水印（原因未定）
+## ⚠️ 前置条件：自动化导出的图带 "demo" 水印（已定位到导出环节）
 
-用 `originpro` 脚本导出的 Origin 图会被平铺的青色 "demo" 水印覆盖，**不能用于投稿**。
-**已排除的原因**：不是授权问题（安装为 OriginPro 2025b、`[Registration] UserType=PR`、
-窗口标题无 Demo 标记、无激活提示），也不是导出 API 问题（`save_fig` 内部就是 `expgraph -sw`，
-与 GUI 的"导出图形"是同一个 X-Function）。
-**尚未排除**：图形由脚本创建（`new_sheet` + `plotxy`）、自动化会话被 `set_show(False)` 隐藏这两点。
-细节与待跑的实验见 [automation-stack.md](references/automation-stack.md)。
-**在结论明确前**：Origin 路线产出的图必须逐张肉眼确认无水印；要交付正式插图，
-要么先解决这个水印，要么改走 matplotlib/SVG 出图。
+用 `originpro` 脚本导出 Origin 图，PNG 会被平铺的青色 "demo" 水印覆盖，**不能用于投稿**。
+**关键事实**：同一张图**显示在 Origin 窗口里是干净的**，水印是"导出"这一动作经由自动化接口时加上的。
+已排除授权、导出 API、窗口可见性、数据来源、导出参数、实例来源六种假设。
+**在结论明确前**：Origin 路线产出的图必须逐张肉眼确认无水印；推荐折中做法 ——
+**自动化只建图并存 OPJU，最终导出由用户在 GUI 里完成**；或改走 matplotlib/SVG 出图。
+完整证据链与应对见 [automation-stack.md](references/automation-stack.md)。
 
 ## 交付形态
 

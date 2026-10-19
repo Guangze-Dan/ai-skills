@@ -15,40 +15,49 @@
 
 本机软件：Origin 2025b（10.25）、Visio LTSC 专业版 2024（16.0.17932）、**无任何 CAD**。
 
-## ⚠️ 头号待查：自动化导出的图带 "demo" 水印（原因未定）
+## ⚠️ 核心结论：水印是"导出时"由自动化接口引入的（已定位到这一层）
 
-用 `originpro` 脚本导出时，图会被平铺的青色 **"demo"** 文字覆盖（实测青色像素约占画面 2.16%），
+用 `originpro` 脚本导出时，PNG 会被平铺的青色 **"demo"** 文字覆盖（实测青色像素约占 1.9%–2.7%），
 **不能用于投稿**。证据图样本：`D:\Zcode\.zcode\workspace\default\origin_watermark_check.png`。
 
-**已经排除的两条**（都实测过，不要再往这两个方向查）：
+### 关键事实：图本身是干净的，水印只在导出环节被加上
 
-1. **不是授权问题。** 早先"Origin 未激活"的说法是**错的**，已推翻。实际证据：
-   - 安装是 **OriginPro** 2025b（10.25.212），窗口标题为 `OriginPro 2025b - UNTITLED`，无 Demo 标记；
-   - `Origin.ini` 与 `InstallInfo.ini` 里都是 `[Registration] UserType=PR`；
-   - 用户明确表示自己的 Origin 从不提示激活，且**手工导出一直正常**；
-   - `C:\ProgramData\OriginLab\osn.dat` 就是旧版 `olicense.lic` 改名来的授权容器，**它存在**
-     （`System/oc_sys.h` 里有官方注释说明），之前误判是因为只看到 `License\` 目录为空。
-2. **不是导出 API 的问题。** 已读 `originpro/graph.py` 源码：`save_fig()` 内部拼的就是
-   `expgraph -sw type:=... filename:=... path:=...`，**与 GUI 菜单里的"导出图形"是同一个 X-Function**。
-   所以"用 save_fig 才带水印、用 GUI 导出就干净"这种解释不成立。
+让脚本把图显示在 Origin 窗口里、然后直接截图 Origin 主窗口：
+**屏幕上的 Graph1 完全干净，没有任何水印**；而同一张图导出成 PNG 就带水印。
+所以水印不是画进图里的，是**导出这一动作**加上的。
 
-**尚未排除、需要继续验证的两条**：
+### 已排除的原因（都实测过，别再往这些方向查）
 
-1. 图形是**由脚本创建**的（`op.new_sheet` + `from_list` + `plotxy iy:=(1,2) plot:=200;`），
-   而用户手工画图走的是另一条路径。
-2. 自动化会话把 Origin **隐藏**了 —— 所有带水印的导出都发生在 `op.set_show(False)`（即 LabTalk `@VIS=0`）之后。
+| 假设 | 实验 | 结果 |
+|---|---|---|
+| Origin 未激活 | 查注册表/授权容器/窗口标题 | **排除**。安装为 OriginPro，`UserType=PR`，标题 `OriginPro 2025b - UNTITLED` 无 Demo 标记，`osn.dat` 授权容器存在，用户称从不提示激活 |
+| `save_fig` 与 GUI 导出走的不是同一条路 | 读 `originpro/graph.py` 源码 | **排除**。`save_fig()` 内部就是 `expgraph -sw ...`，与 GUI"导出图形"是同一个 X-Function |
+| 隐藏窗口（`set_show(False)`）导致 | 可见模式导出对照 | **排除**。可见模式导出照样带水印（2.721%） |
+| 数据由 Python 写入导致 | 改用 Origin 自带样例 `Samples\Graphing\Group.dat` | **排除**。照样带水印（2.685%） |
+| 导出参数（`tr1.Unit`/`tr1.Width`）导致 | 五种参数组合对照 | **排除**。不给 width、给 width、`expGraph` 不带任何 `tr1` 覆盖，**全部带水印**（1.894%） |
+| 自动化"启动"的实例有问题 | 先手工正常启动 Origin，再让脚本附着上去导出 | **排除**。附着到交互式启动的实例，导出**照样带水印** |
 
-**待跑的对照实验**（各导出一次、比较青色像素占比）：
-- A：隐藏模式 + `save_fig`（已知带水印，作基线）
-- B：**可见模式** + `save_fig` ← 关键变量
-- C：可见模式下手工建图，再由脚本导出
+### 最终定位
 
-最快的判别办法其实是让用户**自己手工导出一张图**：若手工导出干净、脚本导出带水印，
-则原因锁定在自动化会话上；若手工导出也带水印，则回到安装状态。
+**只要导出这一动作是经由自动化接口（originpro / OriginExt / COM）发起的，就被加上 demo 水印；
+手工在 GUI 里导出不受影响。** 图内容、数据来源、窗口可见性、导出参数、实例来源都不影响结果。
 
-**注意**：Origin 是 GUI 程序，**Windows 会话锁屏时无法创建窗口，自动化会直接挂住**
-（`op.lt_exec("type -a $(@V)")` 之后卡死）。跑这类实验前先确认会话处于解锁状态，
-并用 `taskkill /F /IM Origin64.exe` 清理残留进程。
+最可能的原因是 Origin 的授权在**自动化调用入口**上不被承认（OriginLab 的自动化/Python 驱动导出
+可能有独立的授权判定）。**这一层我无法从外部确认** —— 启动逻辑在编译好的 `_OriginExt.pyd` 里，
+OriginLab 官网的授权页也没有相关说明。需要向 OriginLab 确认，或由用户核对自己的授权类型。
+
+### 可用的应对
+
+1. **让用户验证对照**：在 Origin 里打开图 → 文件 → 导出图形 → 存 PNG，看是否干净。
+   若干净（与"以前导出都没问题"吻合），即确认问题限于自动化路径。
+2. **折中方案（当前推荐）**：自动化只负责**建图并保存 OPJU**，最终导出由用户在 GUI 里完成
+   （或半自动批量导出）。牺牲一部分自动化收益，但产出干净、可投稿。
+3. 纯数据图改走 matplotlib/SVG 出图，绕开 Origin。
+4. 向 OriginLab 确认自动化导出的授权要求。
+
+**注意**：Origin 是 GUI 程序，**Windows 会话锁屏时无法创建窗口，自动化会挂在连接之后**
+（`op.lt_exec("type -a $(@V)")` 打印完就卡死）。跑这类实验前先确认会话已解锁，
+并用 `Get-Process -Name Origin64 | Stop-Process -Force` 清理残留进程。
 
 ## Origin：已验证的属性与写法
 
