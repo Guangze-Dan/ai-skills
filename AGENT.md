@@ -1,6 +1,6 @@
 # AGENT.md — AI Agent 使用说明
 
-本仓库是用户的个人 skills 统一真源。若你的运行环境中已接入这些 skills（`~/.zcode/skills`、`~/.agents/skills`、`~/.claude/skills`、`~/.codex/skills` 下的 junction），直接按常规方式调用即可，无需关心本仓库。
+本仓库是用户的个人 skills 统一真源。若你的运行环境中已接入这些 skills（`~/.zcode/skills`、`~/.agents/skills`、`~/.claude/skills`、`~/.codex/skills` 下的 junction；DeepSeek Harness 亦原生读取 `~/.agents/skills`，无需额外接入），直接按常规方式调用即可，无需关心本仓库。
 
 ## 给 agent 的规则
 

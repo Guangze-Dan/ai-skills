@@ -42,6 +42,21 @@ setup.cmd          # 或: powershell -ExecutionPolicy Bypass -File install.ps1
 | Claude Code | `%USERPROFILE%\.claude\skills` |
 | Codex | `%USERPROFILE%\.codex\skills` |
 
+### DeepSeek Harness（DSH / dsh 桌面版）
+
+DeepSeek Harness **无需 junction，天然接入**：其核心插件 `@deepseek-ai/dsh-skill-filesystem`
+默认扫描 `%USERPROFILE%\.agents\skills`（`agentsHome` 默认 `~/.agents`，可被 `DSH_AGENTS_HOME`
+环境变量覆盖；`includeDefaultRoots` 默认开启，且默认跟随符号链接）。由于 AGENTS 标准目录本身就是
+指向本仓库的 junction 农场，**仓库里的 skill 更新后 dsh 重开会话即生效，无需任何同步动作**。
+
+- 已验证（v0.2.x 桌面版，`dsh-skill-filesystem` 源码确认）：扫描根为
+  项目 `.dsh/skills`、项目 `.agents/skills`、`customSkillDirs`、`~/.dsh/skills`、`~/.agents/skills`、内置目录。
+- **不要**往 `install.ps1` 的 targets 里加 `~/.dsh/skills`：那会让 dsh 经 user-agents 和 user-dsh
+  两个根重复看到同一批 skill。
+- 在 dsh 里新建的 skill（`~/.dsh/skills/<name>/SKILL.md`）由 `collect.ps1` 负责回收
+  （该路径已加入其 `$Sources`），收进仓库后自动换成 junction。
+- 桌面版里可用 Skill Explorer（社区插件 `@linxin666/dsh-client-ui-skill-explorer`，已安装）直接查看。
+
 ### 嵌入其他仓库（多仓嵌套）
 
 方式 A — 子模块（推荐，仓库内固定版本）：

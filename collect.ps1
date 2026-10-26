@@ -15,7 +15,8 @@ $Sources = @(
     (Join-Path $env:USERPROFILE '.zcode\skills'),
     (Join-Path $env:USERPROFILE '.agents\skills'),
     (Join-Path $env:USERPROFILE '.claude\skills'),
-    (Join-Path $env:USERPROFILE '.codex\skills')
+    (Join-Path $env:USERPROFILE '.codex\skills'),
+    (Join-Path $env:USERPROFILE '.dsh\skills')
 )
 
 function Get-DirSignature($dir) {
