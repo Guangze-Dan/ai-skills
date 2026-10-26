@@ -19,7 +19,9 @@ $WatchRoots = @(
     'E:\Zcode数据\.zcode\workspace\default',   # new machine (C:\Users\Dan)
     'E:\Zcode数据',
     'D:\Zcode\.zcode\workspace\default',       # old machine (C:\Users\32204)
-    'D:\Zcode'
+    'D:\Zcode',
+    'D:\DSH',                                  # DSH 主工作区 (DeepSeek Harness)
+    'C:\机械硬盘\DSH'                          # DSH 原版工作区
 )
 $Extensions = @('.ps1', '.py', '.bat', '.cmd', '.sh', '.js', '.ts', '.ahk')
 $MaxBytes   = 2MB
@@ -38,6 +40,8 @@ $SeedMap = @{
     '_explore.py'                      = 'scripts/legacy/explore_tree.py'
     '启动ZCode.bat'                    = 'scripts/productivity/start_zcode.bat'
     '_C盘收尾_关闭ZCode后运行.bat'     = 'scripts/legacy/c_drive_cleanup.bat'
+    'asar-tool.js'                     = 'scripts/dsh/asar-tool.js'
+    'scan-asar.js'                     = 'scripts/dsh/scan-asar.js'
 }
 
 try {
