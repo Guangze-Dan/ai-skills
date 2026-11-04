@@ -1,6 +1,6 @@
 ---
 name: course-report
-description: 课程报告/课程论文格式助手（骨架，格式文件待补充）。当用户要写课程报告、课程论文、课程作业、实验报告的排版与写作，或提到"课程报告、课程作业、course report"时使用。Use for course report/assignment formatting. 当前格式规范未录入：触发时应先向用户索要课程老师下发的格式要求，再按其执行；插图遵循 figure-visio / figure-origin 技能。
+description: 课程报告/课程论文格式助手（骨架，格式文件待补充）。当用户要写课程报告、课程论文、课程作业、实验报告的排版与写作，或提到"课程报告、课程作业、course report"时使用。Use for course report/assignment formatting. 当前格式规范未录入：触发时应先向用户索要课程老师下发的格式要求，再按其执行；插图遵循 academic-figure-style 技能。
 ---
 
 # 课程报告格式助手（骨架）
@@ -17,7 +17,7 @@ description: 课程报告/课程论文格式助手（骨架，格式文件待补
 
 - [ ] 封面：课程名、题目、学号姓名、日期
 - [ ] 标题层级与正文字体字号、行距
-- [ ] 图表编号与图题表题格式（插图 → figure-visio / figure-origin）
+- [ ] 图表编号与图题表题格式（插图 → academic-figure-style）
 - [ ] 公式编号
 - [ ] 参考文献格式
 - [ ] 页眉页脚与页码

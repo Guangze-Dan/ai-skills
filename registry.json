@@ -61,7 +61,7 @@
                    {
                        "name":  "course-report",
                        "dir":  "skills/course-report",
-                       "description":  "课程报告/课程论文格式助手（骨架，格式文件待补充）。当用户要写课程报告、课程论文、课程作业、实验报告的排版与写作，或提到\"课程报告、课程作业、course report\"时使用。Use for course report/assignment formatting. 当前格式规范未录入：触发时应先向用户索要课程老师下发的格式要求，再按其执行；插图遵循 figure-visio / figure-origin 技能。"
+                       "description":  "课程报告/课程论文格式助手（骨架，格式文件待补充）。当用户要写课程报告、课程论文、课程作业、实验报告的排版与写作，或提到\"课程报告、课程作业、course report\"时使用。Use for course report/assignment formatting. 当前格式规范未录入：触发时应先向用户索要课程老师下发的格式要求，再按其执行；插图遵循 academic-figure-style 技能。"
                    },
                    {
                        "name":  "deep-research",
@@ -276,12 +276,12 @@
                    {
                        "name":  "paper-cn-journal",
                        "dir":  "skills/paper-cn-journal",
-                       "description":  "中文期刊论文投稿格式助手（骨架，格式文件待补充）。当用户要写或排版中文期刊投稿论文（中文核心、EI 中文版、学报），或提到\"中文论文、期刊投稿、学报、按xx期刊格式\"时使用。Use for Chinese journal paper formatting. 当前格式规范未录入：触发时应先向用户索要目标期刊的投稿须知/模板，再按其执行；插图遵循 figure-visio / figure-origin 技能。"
+                       "description":  "中文期刊论文投稿格式助手。当用户要写、排版或投稿中文期刊论文（中文核心、EI 中文版、学报），或提到\"中文论文、期刊投稿、学报、投稿须知、按xx期刊格式\"时使用。Use for Chinese journal paper formatting \u0026 submission. 已内置《地球科学》（中国地质大学学报）投稿要点；投其他期刊时先索要该刊投稿须知/模板。插图遵循 academic-figure-style 技能。"
                    },
                    {
                        "name":  "paper-en-sci",
                        "dir":  "skills/paper-en-sci",
-                       "description":  "English SCI/期刊论文写作与格式助手（骨架，格式文件待补充）。当用户要写或排版英文期刊论文（SCI、SSCI、EI 英文版），或提到\"English paper、SCI、manuscript、submit to journal、英文投稿\"时使用。Use for English journal paper writing/formatting. 当前目标期刊格式未录入：触发时应先向用户确认目标期刊并索要其 guide for authors / LaTeX / Word 模板，再按其执行；figure-visio / figure-origin 规范同样适用于英文稿插图。"
+                       "description":  "English SCI/期刊论文写作与格式助手（骨架，格式文件待补充）。当用户要写或排版英文期刊论文（SCI、SSCI、EI 英文版），或提到\"English paper、SCI、manuscript、submit to journal、英文投稿\"时使用。Use for English journal paper writing/formatting. 当前目标期刊格式未录入：触发时应先向用户确认目标期刊并索要其 guide for authors / LaTeX / Word 模板，再按其执行；academic-figure-style 规范同样适用于英文稿插图。"
                    },
                    {
                        "name":  "paper-spine",
@@ -296,7 +296,7 @@
                    {
                        "name":  "thesis-cug",
                        "dir":  "skills/thesis-cug",
-                       "description":  "毕业论文/学位论文格式助手（骨架，格式文件待补充）。当用户要写、排版、检查毕业论文或学位论文（摘要、章节正文、图表、致谢），或提到\"毕业论文、学位论文、开题、thesis、dissertation\"时使用。Use for graduation thesis writing/formatting. 当前格式规范未录入：触发时应先向用户索要学校模板或格式要求文件，再按其执行；插图遵循 figure-visio / figure-origin 技能。"
+                       "description":  "中国地质大学（武汉）研究生学位论文格式规范（2025年5月官方版，已内置完整参数）。当用户写、排版、检查或修改地大（武汉）博士学位论文、硕士学位论文、专业学位论文，或提到\"毕业论文、学位论文、论文格式、封面、摘要排版、页眉、参考文献格式、致谢/附录排版\"且上下文是地大时使用。Use for CUG-Wuhan graduate thesis formatting (built-in official 2025 spec). 本科毕业论文要求不同（见文末）。插图规范联动 academic-figure-style 技能。"
                    },
                    {
                        "name":  "ui-styling",

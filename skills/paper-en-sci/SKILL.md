@@ -1,6 +1,6 @@
 ---
 name: paper-en-sci
-description: English SCI/期刊论文写作与格式助手（骨架，格式文件待补充）。当用户要写或排版英文期刊论文（SCI、SSCI、EI 英文版），或提到"English paper、SCI、manuscript、submit to journal、英文投稿"时使用。Use for English journal paper writing/formatting. 当前目标期刊格式未录入：触发时应先向用户确认目标期刊并索要其 guide for authors / LaTeX / Word 模板，再按其执行；figure-visio / figure-origin 规范同样适用于英文稿插图。
+description: English SCI/期刊论文写作与格式助手（骨架，格式文件待补充）。当用户要写或排版英文期刊论文（SCI、SSCI、EI 英文版），或提到"English paper、SCI、manuscript、submit to journal、英文投稿"时使用。Use for English journal paper writing/formatting. 当前目标期刊格式未录入：触发时应先向用户确认目标期刊并索要其 guide for authors / LaTeX / Word 模板，再按其执行；academic-figure-style 规范同样适用于英文稿插图。
 ---
 
 # English Paper 格式助手（骨架）
@@ -18,7 +18,7 @@ description: English SCI/期刊论文写作与格式助手（骨架，格式文�
 - [ ] Title page：title, authors, affiliations, corresponding author, highlights
 - [ ] Abstract / keywords 限制
 - [ ] Structure: IMRaD、节编号风格（1. / 1.1.）
-- [ ] Figures & tables：尺寸（single 90 mm / double 190 mm）、分辨率（≥300 dpi）、图题格式（插图 → figure-visio / figure-origin）
+- [ ] Figures & tables：尺寸（single 90 mm / double 190 mm）、分辨率（≥300 dpi）、图题格式（插图 → academic-figure-style）
 - [ ] References：期刊引用样式（ACS / APA / numbered）
 - [ ] Units & nomenclature：SI units、变量斜体
 - [ ] Declarations：funding, conflict of interest, data availability, CRediT
