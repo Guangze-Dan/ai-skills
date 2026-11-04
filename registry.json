@@ -1,7 +1,7 @@
 {
-    "updated":  "2026-10-27",
+    "updated":  "2026-11-04",
     "source":  "https://github.com/Guangze-Dan/ai-skills",
-    "count":  59,
+    "count":  63,
     "skills":  [
                    {
                        "name":  "academic-figure-style",
@@ -57,6 +57,11 @@
                        "name":  "\u003e-",
                        "dir":  "skills/cli-anything-zotero",
                        "description":  "CLI harness for Zotero."
+                   },
+                   {
+                       "name":  "course-report",
+                       "dir":  "skills/course-report",
+                       "description":  "课程报告/课程论文格式助手（骨架，格式文件待补充）。当用户要写课程报告、课程论文、课程作业、实验报告的排版与写作，或提到\"课程报告、课程作业、course report\"时使用。Use for course report/assignment formatting. 当前格式规范未录入：触发时应先向用户索要课程老师下发的格式要求，再按其执行；插图遵循 figure-visio / figure-origin 技能。"
                    },
                    {
                        "name":  "deep-research",
@@ -269,6 +274,16 @@
                        "description":  "Bring the Open Design catalogue into any agent session: 150+ brand DESIGN.md files, 110+ rendering templates (decks, prototypes, dashboards, posters, image/video/audio), 130+ functional skills, and 11 craft references. Pick a brand spec and a template/skill, layer in universal craft rules, then follow the resulting workflow. Use when the user wants to build a deck, prototype, landing page, dashboard, marketing artifact, or apply a specific brand\u0027s visual identity to their project. triggers: - \"use open design\" - \"with open design\" - \"open design skill\" - \"open-design\" - \"make me a deck\" - \"build a deck\" - \"pitch deck\" - \"design system\" - \"brand guidelines\" - \"apply design system\" - \"landing page with\" - \"dashboard with\" - \"marketing page with\""
                    },
                    {
+                       "name":  "paper-cn-journal",
+                       "dir":  "skills/paper-cn-journal",
+                       "description":  "中文期刊论文投稿格式助手（骨架，格式文件待补充）。当用户要写或排版中文期刊投稿论文（中文核心、EI 中文版、学报），或提到\"中文论文、期刊投稿、学报、按xx期刊格式\"时使用。Use for Chinese journal paper formatting. 当前格式规范未录入：触发时应先向用户索要目标期刊的投稿须知/模板，再按其执行；插图遵循 figure-visio / figure-origin 技能。"
+                   },
+                   {
+                       "name":  "paper-en-sci",
+                       "dir":  "skills/paper-en-sci",
+                       "description":  "English SCI/期刊论文写作与格式助手（骨架，格式文件待补充）。当用户要写或排版英文期刊论文（SCI、SSCI、EI 英文版），或提到\"English paper、SCI、manuscript、submit to journal、英文投稿\"时使用。Use for English journal paper writing/formatting. 当前目标期刊格式未录入：触发时应先向用户确认目标期刊并索要其 guide for authors / LaTeX / Word 模板，再按其执行；figure-visio / figure-origin 规范同样适用于英文稿插图。"
+                   },
+                   {
                        "name":  "paper-spine",
                        "dir":  "skills/paper-spine",
                        "description":  "Research, write, review and deliver evidence-bound papers in one task, with user choices, real files, editable outputs and same-task revision."
@@ -277,6 +292,11 @@
                        "name":  "slides",
                        "dir":  "skills/slides",
                        "description":  "Create strategic HTML presentations with Chart.js, design tokens, responsive layouts, copywriting formulas, and contextual slide strategies."
+                   },
+                   {
+                       "name":  "thesis-cug",
+                       "dir":  "skills/thesis-cug",
+                       "description":  "毕业论文/学位论文格式助手（骨架，格式文件待补充）。当用户要写、排版、检查毕业论文或学位论文（摘要、章节正文、图表、致谢），或提到\"毕业论文、学位论文、开题、thesis、dissertation\"时使用。Use for graduation thesis writing/formatting. 当前格式规范未录入：触发时应先向用户索要学校模板或格式要求文件，再按其执行；插图遵循 figure-visio / figure-origin 技能。"
                    },
                    {
                        "name":  "ui-styling",
