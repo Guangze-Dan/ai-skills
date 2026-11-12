@@ -6,7 +6,7 @@ if exist "%ZEXE%" goto launch
 
 rem Fallbacks, in case ZCode is moved or reinstalled elsewhere.
 for %%P in (
-    "C:\Users\32204\AppData\Local\Programs\ZCode\ZCode.exe"
+    "%LOCALAPPDATA%\Programs\ZCode\ZCode.exe"
     "C:\Program Files\ZCode\ZCode.exe"
     "D:\ZCode\ZCode.exe"
 ) do (
@@ -21,7 +21,7 @@ exit /b 0
 :missing
 echo [ERROR] ZCode.exe not found. Looked in:
 echo   D:\Zcode\apps\ZCode\ZCode.exe
-echo   C:\Users\32204\AppData\Local\Programs\ZCode\ZCode.exe
+echo   %LOCALAPPDATA%\Programs\ZCode\ZCode.exe
 echo   C:\Program Files\ZCode\ZCode.exe
 echo   D:\ZCode\ZCode.exe
 echo Edit this file and set ZEXE to the correct path.

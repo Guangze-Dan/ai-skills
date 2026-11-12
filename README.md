@@ -8,7 +8,7 @@
 
 ```
 ai-skills/
-├── skills/                 # 37 个个人 skill，每个一个文件夹（skills/<name>/SKILL.md）
+├── skills/                 # 63 个个人 skill，每个一个文件夹（skills/<name>/SKILL.md）
 ├── scripts/                # 历史自动化脚本（已分类）
 │   ├── android-mtp/        #   小米手机 MTP/USB 驱动修复 + APK 推送
 │   ├── android-ui/         #   Android 屏幕 UI dump 解析
@@ -96,7 +96,7 @@ New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "D:\ai
 `scripts/inbox/` 是自动归档的暂存区，隔段时间把里面的文件挪进合适的主题目录即可（挪动后若工作区原件再被修改，inbox 会重新出现副本，删掉即可）。agent 也可以在任务中直接把脚本放进 `scripts/<主题>/` 自己提交，两种方式不冲突。
 
 
-## Skills 一览（37 个）
+## Skills 概览（63 个，完整清单见 [registry.json](registry.json)）
 
 完整描述见 [registry.json](registry.json)（含每个 skill 的触发条件），各分类：
 
@@ -125,6 +125,6 @@ New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "D:\ai
 
 ## 说明
 
-- 本仓库为**私有**，junction 只在本机有效；换机器用 `git clone + install.ps1` 重建。
+- 本仓库为**公开**仓库，欢迎 fork / 引用；junction 只在本机有效，换机器用 `git clone + install.ps1` 重建。
 - `.system` 目录（Codex 自动管理的系统 skill）不属于本仓库，由各 agent 自行维护。
 - 已装 git 的机器上，`install.ps1` 会备份内容不一致的旧目录到 `.backup/`（已 gitignore），可随时人工回收。

@@ -16,9 +16,9 @@ $StateFile  = Join-Path $Repo 'tools\.sync-state.json'
 $LogFile    = Join-Path $Repo 'tools\sync.log'
 # Watch roots cover every machine that shares this repo; missing paths are skipped automatically.
 $WatchRoots = @(
-    'E:\Zcode数据\.zcode\workspace\default',   # new machine (C:\Users\Dan)
+    'E:\Zcode数据\.zcode\workspace\default',   # new machine
     'E:\Zcode数据',
-    'D:\Zcode\.zcode\workspace\default',       # old machine (C:\Users\32204)
+    'D:\Zcode\.zcode\workspace\default',       # old machine
     'D:\Zcode',
     'D:\DSH',                                  # DSH 主工作区 (DeepSeek Harness)
     'C:\机械硬盘\DSH'                          # DSH 原版工作区

@@ -5,7 +5,7 @@ import os
 import numpy as np
 from PIL import Image, ImageDraw
 
-SRC = r"C:\Users\32204\.zcode\cli\image-cache\sess_9bc10f54-6a4b-4ab2-b20e-0772c627edee\image-4994f8eea1e453ae51416d6f1e4043ba.png"
+SRC = os.path.expandvars(r"%USERPROFILE%\.zcode\cli\image-cache\sess_9bc10f54-6a4b-4ab2-b20e-0772c627edee\image-4994f8eea1e453ae51416d6f1e4043ba.png")
 WORKSPACE = r"D:\Zcode\.zcode\workspace\default"
 
 
