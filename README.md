@@ -28,8 +28,8 @@ ai-skills/
 ### 新机器接入（Windows）
 
 ```powershell
-git clone https://github.com/Guangze-Dan/ai-skills.git D:\ai-skills
-cd D:\ai-skills
+git clone https://github.com/Guangze-Dan/ai-skills.git $HOME\ai-skills
+cd $HOME\ai-skills
 setup.cmd          # 或: powershell -ExecutionPolicy Bypass -File install.ps1
 ```
 
@@ -73,7 +73,7 @@ cd .ai-skills && powershell -ExecutionPolicy Bypass -File install.ps1 -Local
 方式 B — 只挂部分 skill：手动对需要的 skill 建 junction：
 
 ```powershell
-New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "D:\ai-skills\skills\nature-writing"
+New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "$HOME\ai-skills\skills\nature-writing"
 ```
 
 ## 日常工作流
