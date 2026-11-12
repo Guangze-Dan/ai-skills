@@ -125,6 +125,16 @@ New-Item -ItemType Junction -Path ".claude\skills\nature-writing" -Target "$HOME
 
 ## 说明
 
-- 本仓库为**公开**仓库，欢迎 fork / 引用；junction 只在本机有效，换机器用 `git clone + install.ps1` 重建。
+- 本仓库为**公开**仓库，可自由下载、按原样使用；junction 只在本机有效，换机器用 `git clone + install.ps1` 重建。
 - `.system` 目录（Codex 自动管理的系统 skill）不属于本仓库，由各 agent 自行维护。
 - 已装 git 的机器上，`install.ps1` 会备份内容不一致的旧目录到 `.backup/`（已 gitignore），可随时人工回收。
+
+## 版权与使用
+
+本仓库中由作者原创的内容版权归 **Guangze-Dan** 所有，保留所有权利。
+
+- **允许**：克隆、下载、阅读，并按原样在自己的 AI agent 中使用。
+- **不允许**：修改后重新发布、再分发、商业使用，或以自己的名义发布衍生版本；转载须注明出处。
+- **例外**：`skills/` 中来自第三方的 skill 归其各自作者所有，遵循其原始许可（见各 skill 目录内的说明与上游链接）。
+- 如需合作或授权，请通过 GitHub 联系作者。
+
